@@ -1,0 +1,23 @@
+extends layout_principale
+block content
+    #accordion.panel-group(style='margin: 40px;')
+        .panel.panel-default
+            .panel-heading
+                h2.panel-title
+                    a(data-toggle='collapse' data-parent='#accordion' href='#collapse1')
+                        h2 Liste attive
+            #collapse1.panel-collapse.collapse.in
+                .panel-body
+                    each lista in listeUtente
+                        p
+                            li
+                                a(href='/spesa?lista=' + lista.ID)=lista.Nome
+        .panel.panel-default
+            .panel-heading
+                h2.panel-title
+                    a(data-toggle='collapse' data-parent='#accordion' href='#collapse2')
+                        h2 Operazioni
+            #collapse2.panel-collapse.collapse
+                .panel-body
+                    p
+                        a porcamcarota

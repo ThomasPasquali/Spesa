@@ -1,0 +1,21 @@
+extends layout
+
+block content
+        .limiter
+            .container-login100
+                .wrap-login100.p-t-50.p-b-90
+                    form.login100-form.validate-form.flex-sb.flex-w(action='/login', method='POST')
+                        span.login100-form-title.p-b-51
+                            img.transImage(src='/images/eurospin-logo.png',height="165",width="150")
+                            | Login
+                        span.login100-form-title-2
+                            label #{errNotValidUsrOrPass}
+                        .wrap-input100.validate-input.m-b-16(data-validate='Username obbligatorio')
+                            input.input100(type='text' name='usr' placeholder='Username')
+                            span.focus-input100
+                        .wrap-input100.validate-input.m-b-16(data-validate='Password obbligatoria')
+                            input.input100(type='password' name='psw' placeholder='Password')
+                            span.focus-input100
+                        .container-login100-form-btn.m-t-17
+                            button.login100-form-btn
+                                | Login
