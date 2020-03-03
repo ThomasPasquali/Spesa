@@ -1,0 +1,161 @@
+/*
+    @autor: davideberga0
+    @content: Tutto il css che non riguarda la pagina di Login
+*/
+
+.float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:40px;
+    right:40px;
+    background-color:#005CB9;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+  }
+  
+  .my-float{
+    margin-top:22px;
+    color: #f5aa3b;
+  }
+  
+  .utentiAssociati{
+    margin: 8px;
+    padding: 0px;
+  }
+  
+  form.lista{
+    padding: 0;
+    width: 100%;
+  }
+  
+  div.utenti{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  
+  div.utente{
+    width: 10ch;
+    flex-basis: 170px;
+    display: inline-flex;
+    padding: 5px;
+    margin: 5px;
+    background-color: #5e5e5e;
+    border-radius: 20px;
+    border-width: 0px;
+  }
+  
+  label.utente{
+    background-color: rgba(0,0,0,0.0);
+    display: inline;
+    padding-left: 30px;
+    border-width: 0px;
+    text-align: left;
+  }
+
+  label.utenti{
+    background-color: rgba(0,0,0,0.0);
+    display: inline;
+    padding-left: 2px;
+    border-width: 0px;
+    text-align: left;
+  }
+
+  input.invalid{
+    color: #c12e2a;
+  }
+
+  div.blocked{
+    pointer-events: none; 
+    opacity: 0.4;
+  }
+
+  div.actived{
+    pointer-events: all; 
+    opacity: 1;
+  }
+  
+  button.utente{
+    position: absolute;
+    background-color: #c12e2a;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    text-align: center;
+    border-radius: 100%;
+  }
+  
+  i.rimuovi{
+    background-color: rgba(0,0,0,0.0);
+    color: whitesmoke;
+  }
+  
+  button.aggiungi{
+    background-color: #005CB9;
+    width: 180px;
+    color: #f5aa3b;
+    padding: 5px;
+    display: inline;
+    margin: 10px;
+    text-align: center;
+    line-height: 50%;
+    border-radius: 20px;
+  }
+  
+  i.aggiungi{
+    background-color: rgba(0,0,0,0.0);
+    margin-left: 8px;
+    color: #f5aa3b;
+  }
+
+  span.utente{
+    display: inline;
+    margin-left: 1rem;
+  }
+
+  input.utente{
+    margin: 8px; 
+    display: inline;
+  }
+  
+  div.utente:hover{
+    background-color: #3c3c3c;
+  }
+  
+  div.content-collapsible-utenti{
+    display: none;
+    padding: 10px;
+    background-color: #5e5e5e;
+    width: 100%;
+  }
+  
+  div.content-collapsible-ricette{
+    display: none;
+    padding: 10px;
+    background-color: #5e5e5e;
+    width: 100%;
+  }
+  
+  div.alimento{
+    padding: 10px;
+    margin: 0px 10px 0px 10px;
+    border: 0px solid #3c3c3c;
+    border-bottom-width: 2px;
+  }
+  
+  button.alimento{
+    margin-left: 15px;
+    background-color: #c12e2a;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    border-radius: 100%;
+  }
+  
+  input.alimento{
+    border-width: 0px;
+    margin: 5px;
+  }

@@ -5,46 +5,28 @@ initNewLista = function() {
     $(document).ready(function () {
         var btnAddUtente = $('#addUtenteAssociato');
         var btnAddAlimento = $('#addAlimento');
+        var radioUtenti = $('input.radioUtenti');
+        var selectSuperMer = $('#selectS');
         var contenitore = $('div.utenti.master');
-        var contenitoreAlimenti = $('div.lista.master');
+        var divAlimenti = $('#divAlimenti');
+        var datalistSupermercati= $('#allSupermercati');
+        var datalistAlimenti = $('#allAlimenti');
+        var inputAlimenti = $('.inpuntWithList');
 
-        //Quando il pulsante 'seleziona tutti' cambia stato cambiano di stato
-        //anche le checkBox degli utenti definiti come 'Preferiti'
-        $('#allPreferiti').change(
-            function(){
-                if ($(this).is(':checked')) {
-                    $('.prefsChecks').prop('checked', true);
-                }else{
-                    $('.prefsChecks').prop('checked', false);
-                }
-        });
+        var contenitoreAlimenti = $('div.lista.master');
 
         //Quando viene premuto il pulsante OK all'interno del div collassabile
         //tutti gli utenti selezionati vengono aggiunti al form e vengono cancellati i precedenti
         $('#confirmUtenti').click(function (e) {
-            var countUtenti = 1;
             $(contenitore).empty();
-            $('input.prefsChecks').each(function () {
+            $(radioUtenti).each(function () {
                 if ($(this).is(':checked')) {
-                    var nome = $(this).attr('value');
-                    var id = $(this).attr('id');
-                    var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente_' + countUtenti + '" value="' + id + '" /><label class="utente">' + nome + '</label><button type="button" class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button></div>';
+                    var nome = $(this).attr('id');
+                    var id = $(this).attr('value');
+                    var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente" value="' + id + '" /><label class="utente">' + nome + '</label><button type="button" class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button></div>';
                     e.preventDefault();
                     $(contenitore).append(html);
-                    setInput();
                 }
-                countUtenti++;
-            });
-            $('input.genChecks').each(function () {
-                if ($(this).is(':checked')) {
-                    var nome = $(this).attr('value');
-                    var id = $(this).attr('id');
-                    var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente_' + countUtenti + '" value="' + id + '" /><label class="utente">' + nome + '</label><button class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button></div>';
-                    e.preventDefault();
-                    $(contenitore).append(html);
-                    setInput();
-                }
-                countUtenti++;
             });
             $('div.utente').hide().show('fast');
             $('.content-collapsible-utenti').slideUp('fast');
@@ -55,13 +37,8 @@ initNewLista = function() {
         $(contenitore).on('click', '.rmUtenteAssociato', function (e) {
             e.preventDefault();
             var id = $(this).parent('div.utente').find('input.utente').attr('value');
-            $('.prefsChecks').each(function(){
-                if($(this).attr('id') == id){
-                    $(this).prop('checked', false);
-                }
-            });
-            $('.genChecks').each(function(){
-                if($(this).attr('id') == id){
+            $(radioUtenti).each(function(){
+                if($(this).attr('value') == id){
                     $(this).prop('checked', false);
                 }
             });
@@ -81,9 +58,54 @@ initNewLista = function() {
             })
         })
 
+        $(inputAlimenti).change(function (e) {
+            e.preventDefault();
+            let valid = validateSelectInput($(datalistAlimenti), $(this).val());
+            if(valid){
+                $(this).removeClass().addClass('alimento');
+                $(divAlimenti).removeClass().addClass('alimenti actived');
+            }else{
+                $(this).removeClass().addClass('alimento invalid');
+                $(divAlimenti).removeClass().addClass('alimenti blocked');
+            }
+        })
+
+        $(selectSuperMer).change(function (e) {
+            e.preventDefault();
+            let valid = validateSelectInput($(datalistSupermercati), $(this).val());
+            if(valid){
+                /*jconfirm({
+                    title: 'Confirm!',
+                    content: 'Simple confirm!',
+                    buttons: {
+                        confirm: function () {
+                            $.alert('Confirmed!');
+                        },
+                        cancel: function () {
+                            $.alert('Canceled!');
+                        },
+                        somethingElse: {
+                            text: 'Something else',
+                            btnClass: 'btn-blue',
+                            keys: ['enter', 'shift'],
+                            action: function(){
+                                $.alert('Something else?');
+                            }
+                        }
+                    }
+                });*/
+                $(this).removeClass().addClass('alimento');
+                $(divAlimenti).removeClass().addClass('alimento actived');
+                recreateDataList('/get/', $(datalistAlimenti), 'oggettiSupermercato', { IDSupermercato : getDatalistId($(datalistSupermercati), $(this).val())})
+            }else{
+                $(this).removeClass().addClass('alimento invalid');
+                $(divAlimenti).removeClass().addClass('alimenti blocked');
+            }
+        });
+
         $(btnAddAlimento).click(function (e) {
             var counter = 0;
-            var html = '<div class="alimento"><input style="width: 200px;" class="alimento" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
+            var html = '<div class="alimento"><input style="width: 200px;" class="alimento inpuntWithList" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
             e.preventDefault();
             $(contenitoreAlimenti).append(html);
             $('div.alimento:last-child').hide().fadeIn('slow');
@@ -96,6 +118,37 @@ initNewLista = function() {
 
 setAlimenti = function(alimentiT){
     alimenti = alimentiT;
+}
+
+validateSelectInput = function (datalist, input) {
+    var obj = $(datalist).find('option').filter(function () {
+        return $(this).text()==input;
+    });
+        return obj != null && obj.length > 0;   
+}
+
+getDatalistId = function (datalist, search) {
+    var obj = $(datalist).find('option').filter(function () {
+        return $(this).text()==search;
+    });
+    return obj.attr('data-value');
+}
+
+recreateDataList = function (pageUrl, dataList, request, dati) {
+    $(dataList).empty();
+    pageUrl += request;
+    $.ajax({
+        url : pageUrl,
+        method : 'POST',
+        dataType : 'json',
+        data : dati,
+        success : function(data) {
+            var options= [];
+            $.each(data, function(id, oggetto) {
+                $('#allAlimenti').append( "<option id='" + oggetto.ID + "'>" + oggetto.Nome + " (" + oggetto.Note + ")</option>" );
+            });
+          }
+    });
 }
 
 // Utile per fare il resize dei div utente, in base al contenuto

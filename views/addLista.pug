@@ -14,31 +14,27 @@ block content
             setInput();
         div
             button.aggiungi(id='addUtenteAssociato')
-                h7(style='color: #f5aa3b') Aggiungi
+                h7 Aggiungi
                 i.fa.fa-plus.aggiungi
             div.content-collapsible-utenti(id='selectUtenti')
-                h5(style='margin: 10px;') Preferiti
-                span(style='display: inline;')
-                    input(style='margin: 8px; display: inline;' type='checkbox' id='allPreferiti' name='allPref')
-                    label(style='display: inline;' for='allPreferiti') Seleziona tutti
+                h5(style='margin: 4px;') L'ultimo che ho usato
                 div.utenti.preferiti
-                    each nome in prefGroup
-                        span(style='display: inline;')
-                            input(style='margin: 8px; display: inline;' type='checkbox' class='prefsChecks' value=nome id="" + nome)
-                            label(style='display: inline;' for='allPreferiti')=nome
-                h5(style='margin: 8px;') Tutti
-                div.utenti.allU
+                    span.utente
+                        input.utente(type='radio' class='radioUtenti' value=prefGroup.ID id=prefGroup.Nome  name='groupLinked')
+                        label.utenti(for='allPreferiti')=prefGroup.Nome
+                h5(style='margin: 4px;') I miei gruppi
+                div.utenti
                     each gruppo in allGroups
-                        span(style='display: inline;')
-                            input(style='margin: 8px; display: inline;' type='checkbox' class='genChecks' value=gruppo.ID id=gruppo.Nome)
-                            label(style='display: inline;' for='allPreferiti')=gruppo.Nome
+                        span.utente
+                            input.utente(type='radio' class='radioUtenti' value=gruppo.ID name='groupLinked' id=gruppo.Nome)
+                            label.utenti(for='allPreferiti')=gruppo.Nome
                 button.aggiungi.right(id='confirmUtenti') OK
 
-            h5 Selezione del supermercato
-                input(style="width: 200px;" class="alimento" name="supermercato" list="allSupermercati")
+            h5 In quale supermmercato ti recherai?
+            input(style="width: 200px;" id='selectS' class="alimento" name="supermercato" list="allSupermercati")
 
             h5 Oggetti della lista
-            div(style='pointer-events: none; opacity: 0.4;')
+            div.alimenti.blocked(id='divAlimenti')
                 div.content-collapsible-ricette
                 table
                     tr

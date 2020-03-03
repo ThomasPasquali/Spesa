@@ -8,6 +8,9 @@ const Cookies = require('cookies');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const favicon = require('serve-favicon');
+const fs = require('fs');
+const ini = require('ini');
+global.iniFile = ini.parse(fs.readFileSync('./app.ini', 'utf-8'));
 const query = require('./lib/query.js');
 const misc = require('./lib/misc.js');
 const app = express();
@@ -81,7 +84,8 @@ app.get('/newLista', function (req, res) {
   //FIXME user da sessione
   const user = 'Berga';
   const supermercati = query.getSupermercati();
-  const gruppi = query.getGruppiUtente(user);
+  //FIXME PRENDERE DA SESSIONE
+  const gruppi = query.getGruppiUtente(user, 4);
   //FIXME PRENDERE DA SESSIONE
   const prefGroup = {ID : 1, Nome : 'Rekkie'};
 
@@ -117,6 +121,37 @@ app.get('/home', function (req, res) {
       listeUtente: liste
     });
   }).catch(function(err) { console.log(err); });
+  
+});
+
+/*************SPESA***********/
+app.get(/\/spesa\/\d+/, function (req, res) {
+  const listaID = req.originalUrl.split('/')[2];
+  const lista = query.getLista(listaID);
+  lista.then(function(lista) {
+    res.render('spesa', {
+      lista: lista[0]
+    });
+  }).catch(function(err) { console.log(err); });
+  
+});
+
+/*************RUNTIME REQUESTS***********/
+app.post(/\/get\/(oggettiSupermercato|oggettiLista)/, function (req, res) {
+  const richiesta = req.originalUrl.split('/')[2];
+  let risposta;
+  switch (richiesta) {
+    case 'oggettiSupermercato': risposta = query.getOggettiSupermercato(req.body.IDSupermercato); break;
+    case 'oggettiLista': risposta = query.getOggettiLista(req.body.IDLista); break;
+    default: risposta = null; break;
+  }
+  risposta.then((data) => {
+    res.write(JSON.stringify(data));
+    res.end();
+  }).catch((err) => {
+    res.write(JSON.stringify(err));
+    res.end();
+  });
   
 });
 
