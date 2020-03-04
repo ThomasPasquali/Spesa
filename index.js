@@ -88,12 +88,12 @@ app.get('/newLista', function (req, res) {
   const gruppi = query.getGruppiUtente(user, 4);
   //FIXME PRENDERE DA SESSIONE
   const prefGroup = {ID : 1, Nome : 'Rekkie'};
-
+  
   Promise.all([gruppi, supermercati]).then(function(values) {
     res.render('addLista', {
       title: 'Nuova lista',
       saluto: misc.getSaluto(),
-      user: req.session.username,
+      user: user,
       displayTitle: '',
       displaySearchBar: 'none;',
       displayConfirmB: '',
@@ -137,16 +137,50 @@ app.get(/\/spesa\/\d+/, function (req, res) {
 });
 
 /*************RUNTIME REQUESTS***********/
-app.post(/\/get\/(oggettiSupermercato|oggettiLista)/, function (req, res) {
+app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
     case 'oggettiSupermercato': risposta = query.getOggettiSupermercato(req.body.IDSupermercato); break;
     case 'oggettiLista': risposta = query.getOggettiLista(req.body.IDLista); break;
+    case 'ricetteGruppo': risposta = query.getRicetteGruppo(req.body.IDGruppo, req.body.IDSupermercato); break;
+    case 'ricettaByID' : risposta = query.getOggettiRicetta(req.body.IDRicetta); break;
     default: risposta = null; break;
   }
   risposta.then((data) => {
     res.write(JSON.stringify(data));
+    res.end();
+  }).catch((err) => {
+    res.write(JSON.stringify(err));
+    res.end();
+  });
+  
+});
+
+app.post(/\/update\/(acquistaOggetto|annullaAcquistaOggetto)/, function (req, res) {
+  const richiesta = req.originalUrl.split('/')[2];
+  let risposta;
+  switch (richiesta) {
+    case 'acquistaOggetto':
+      risposta = query.acquistaOggetto(
+        req.body.IDOggetto,
+        req.body.IDLista,
+        req.body.IDUtente,
+        req.body.prezoAcquisto
+      );
+      break;
+    case 'annullaAcquistaOggetto':
+        risposta = query.annullaAcquistaOggetto(
+          req.body.IDOggetto,
+          req.body.IDLista,
+          req.body.IDUtente,
+          req.body.prezoAcquisto
+        );
+        break;
+    default: risposta = null; break;
+  }
+  risposta.then((data) => {
+    res.write(JSON.stringify(null));
     res.end();
   }).catch((err) => {
     res.write(JSON.stringify(err));

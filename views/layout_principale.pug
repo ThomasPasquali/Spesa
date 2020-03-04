@@ -14,20 +14,7 @@ html
         link(rel='stylesheet',type='text/css',href='css/main.css')
         link(rel='stylesheet',type='text/css',href='css/liste.css')
     body
-        nav.navbar.navbar-expand-md.navbar-light.bg-primary
-            a.nav-item.nav-link(href='/home' style='padding: 8px;')
-                img(src='/images/eurospin-logo.png', height='44', width='39', class='logo')
-            - var displayT = displayTitle;
-            h4(style='margin-left: 8px; margin-right:8px;display: ' + displayT) #{saluto} #{user}
-            div.nav.navbar-nav.float-right
-                - var displayR = displaySearchBar;
-                .input-group.md-form.form-sm.form-2.pl-0(style='margin: 5px; display: ' + displayR)
-                    input.form-control.my-0.py-1.lime-border(type='text' placeholder='Cerca' aria-label='Search' id='searchInputBox')
-                    .input-group-append
-                        span#basic-text1.input-group-text.lime.lighten-2
-                            i.fa.fa-search.text-grey(aria-hidden='true')
-            div.nav.navbar-nav.navbar-right
-                a.nav-item.nav-link(href='#' style='margin-left: 5px; margin-right: 5px;') Logout
+        
         block content
         - var displayB = displayConfirmB;
         a.float(style='display: ' + displayB)
