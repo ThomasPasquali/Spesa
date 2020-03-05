@@ -157,7 +157,7 @@ app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID)/, 
   
 });
 
-app.post(/\/update\/(acquistaOggetto|annullaAcquistaOggetto)/, function (req, res) {
+app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -168,15 +168,19 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistaOggetto)/, function (req, re
         req.body.IDUtente,
         req.body.prezoAcquisto
       );
+      io.sockets.emit('acquistato', req.body.IDOggetto);
       break;
-    case 'annullaAcquistaOggetto':
+    case 'annullaAcquistoOggetto':
         risposta = query.annullaAcquistaOggetto(
           req.body.IDOggetto,
-          req.body.IDLista,
-          req.body.IDUtente,
-          req.body.prezoAcquisto
+          req.body.IDLista
         );
+        io.sockets.emit('annullamentoAcquisto', req.body.IDOggetto);
         break;
+    case 'chiudiLista':
+      risposta = query.chiudiLista(req.body.IDLista);
+      io.sockets.emit('chiusuraLista');
+      break;
     default: risposta = null; break;
   }
   risposta.then((data) => {
@@ -189,5 +193,11 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistaOggetto)/, function (req, re
   
 });
 
-app.listen(PORT);
+const server = app.listen(PORT);
 
+/************EVENTS EMITTER************/
+const io = require('socket.io')(server, {
+  path: '/events',
+  pingInterval: 10000,
+  pingTimeout: 5000
+});

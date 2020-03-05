@@ -5,15 +5,20 @@ html
         title #{lista.Nome}
         meta(charset='UTF-8')
         +jquery
-        +bootsrap
+        +bootstrap
         +fontawesome
         +jqueryConfirm
+        +socketIO
         link(rel='stylesheet',type='text/css',href='/css/spesa.css')
-        script(src='/js/spesa.js' defer)
+        link(rel='stylesheet',type='text/css',href='/css/misc.css')
+        script(src='/js/spesa.js' type="module")
+        script(src='/js/misc.js')
     body
-        +navbar
-        input(type="hidden" name="listaID" value=lista.ID)
-        input(type="hidden" name="richiedi_prezzi" value=lista.Richiedi_prezzi)
+        +navbar('none')
+        script.
+            IDLista = parseInt("#{lista.ID}");
+            richiedi_prezzi = ("#{lista.Richiedi_prezzi}" != 0);
+            aperta = ("#{lista.Aperta}" != 0);
         .flex-vertical
             h3 #{lista.Nome} (##{lista.ID}, #{lista.Supermercato})
 
@@ -24,7 +29,8 @@ html
                 +caricamento
 
             .flex.dropdown-control(data-target='#oggetti-acquistati')
-                i.fas.fa-caret-up
+                i.fas.fa-caret-down
                 h4 Oggetti acquistati
-            #oggetti-acquistati.hidden
+            #oggetti-acquistati.flex-vertical
                 +caricamento
+        +confirmButton('fa-lock', 'none')

@@ -1,23 +1,25 @@
-extends layout_principale
-block content
-    #accordion.panel-group(style='margin: 40px;')
-        .panel.panel-default
-            .panel-heading
-                h2.panel-title
-                    a(data-toggle='collapse' data-parent='#accordion' href='#collapse1')
-                        h2 Liste attive
-            #collapse1.panel-collapse.collapse.in
-                .panel-body
-                    each lista in listeUtente
-                        p
-                            li
-                                a(href='/spesa/' + lista.ID)=lista.Nome
-        .panel.panel-default
-            .panel-heading
-                h2.panel-title
-                    a(data-toggle='collapse' data-parent='#accordion' href='#collapse2')
-                        h2 Operazioni
-            #collapse2.panel-collapse.collapse
-                .panel-body
-                    p
-                        a(href="/newLista") Crea una nuova lista
+include misc
+doctype mobile
+html
+    head
+        title Casa pagina
+        meta(charset='UTF-8')
+        +jquery
+        +bootstrap
+        +fontawesome
+        link(rel='stylesheet',type='text/css',href='/css/misc.css')
+        script(src='/js/misc.js')
+    body
+        +navbar('none')
+        .flex-vertical
+            .flex.dropdown-control(data-target='#liste')
+                i.fas.fa-caret-down
+                h2 Liste attive
+            #liste.flex-vertical
+                each lista in listeUtente
+                    a(href='/spesa/' + lista.ID)=lista.Nome
+            .flex.dropdown-control(data-target='#operazioni')
+                i.fas.fa-caret-down
+                h2 Operazioni
+            #operazioni
+                a(href="/newLista") Crea una nuova lista

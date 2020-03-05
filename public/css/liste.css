@@ -1,7 +1,7 @@
 /*
     @autor: davideberga0
     @content: Tutto il css che non riguarda la pagina di Login
-*/
+*/ 
 
 .float{
     position:fixed;
@@ -14,12 +14,11 @@
     text-align:center;
     box-shadow: 2px 2px 3px #999;
   }
-  
+
   .my-float{
     margin-top:22px;
     color: #f5aa3b;
   }
-  
   .utentiAssociati{
     margin: 8px;
     padding: 0px;
@@ -154,8 +153,50 @@
     text-align: center;
     border-radius: 100%;
   }
+
+  .red-triangle{
+    text-decoration-color: #c12e2a;
+    color: #c12e2a;
+  }
+
+  #noUtenze{
+    display: none;
+  }
   
   input.alimento{
     border-width: 0px;
     margin: 5px;
+  }
+
+  .alignleft {
+    float: left;
+    text-align: left;
+    width: 50%;
+    font-family: 'Courier New', Courier, monospace;
+    text-decoration: black;
+    font-size: large;
+    display: block;
+    -webkit-font-smoothing : none;
+  }
+  .alignright {
+    text-align: right;
+    float: right;
+    text-decoration: black;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
+    width: 50%;
+    display: block;
+    -webkit-font-smoothing : none;
+  }
+
+  .scontrino{
+    font-size: x-large;
+  }
+
+  div.rigaScontrino{
+    display: block;
+  }
+
+  p.rigaScontrino{
+    
   }
