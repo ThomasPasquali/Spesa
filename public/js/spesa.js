@@ -1,5 +1,5 @@
-import Oggetto from './classes/Oggetto.js';
 import ListaSpesa from './classes/ListaSpesa.js';
+import Oggetto from './classes/Oggetto.js';
 
 $(document).ready(function() {
 
@@ -7,48 +7,15 @@ $(document).ready(function() {
         window.IDLista,
         window.aperta,
         window.richiedi_prezzi,
+        window.IDsupermercato,
         $('#oggetti-acquistati'),
         $('#oggetti-da-acquistare'),
-        $('#confirmButton'));
+        $('#chiudi'));
 
     /**************EVENT HANDLERS*************/
     /*********Acquisto oggetto**********/
     $('body').on('change', '#oggetti-da-acquistare .oggetto', function() {
-        let obj = $(this);
-        obj.prop('checked', false);
-        //FIXME utente da sessione
-        let utente = 'Berga';
-        let IDOggetto = obj.val();
-        let fieldPrezzo = $('<input type="number" min="0.05" max="999.99" step="0.05" placeholder="Prezzo..." required>');
-        fieldPrezzo.val(obj.data('prezzo'));
-        fieldPrezzo.focusin(function(){ $(this).select(); });
-
-        if(window.listaSpesa.getRichiediPrezzi())
-            $.confirm({
-                title: 'Inserire il prezzo del prodotto',
-                content: fieldPrezzo,
-                buttons: {
-                    submit: {
-                        text: 'Conferma',
-                        btnClass: 'btn-blue',
-                    },
-                    cancel: {
-                        text: 'Annulla',
-                        btnClass: 'btn-gray',
-                    }
-                },
-                onOpen: () => { fieldPrezzo.focusin(); },
-                onAction: function(action){
-                    let prezzo = parseFloat(fieldPrezzo.val());
-                    if(action == 'submit')
-                        if(!prezzo || prezzo > 999.99)
-                            $.alert('Inserire un prezzo valido');
-                        else
-                            window.listaSpesa.acquistaOggetto(IDOggetto, utente, prezzo);
-                }
-            });
-        else
-            listaSpesa.acquistaOggetto(IDOggetto, utente, null);
+        window.listaSpesa.acquistaOggetto($(this).val());
     });
 
     /*********Annullamento acquisto oggetto**********/
@@ -56,14 +23,15 @@ $(document).ready(function() {
         window.listaSpesa.annullaAcquistoOggetto($(this).val());
     });
 
-    $('body').on('click', '#confirmButton', function() {
-        if(window.listaSpesa.isTuttoAcquistato())
-            window.listaSpesa.chiudiLista();
-        else
-            $.alert('Non sono stati acquistati tutti gli oggetti');
+    /*************Chiusura lista***********/
+    $('body').on('click', '#chiudi', function() {
+        window.listaSpesa.chiudiLista();
     });
 
-    
+    /*************Nuovo oggetto***********/
+    $('body').on('click', '#add', function() {
+        window.listaSpesa.nuovoOggetto();
+    });
 
     /**********REAL-TIME EVENTS*********/
     const server = io(window.location.origin, {path: '/events'});
@@ -71,13 +39,20 @@ $(document).ready(function() {
         
         server.on('acquistato', function(IDOggetto) {
             window.listaSpesa.moveToAcquistati(IDOggetto);
-            if(window.listaSpesa.isTuttoAcquistato())
-                $('#confirmButton').show();
         });
 
         server.on('annullamentoAcquisto', function(IDOggetto){
             window.listaSpesa.moveToNonAcquistati(IDOggetto);
-            $('#confirmButton').hide();
+        });
+
+        server.on('modificaQtaOggetto', function(res){
+            var o = window.listaSpesa.getOggetto(res.oggetto);
+            o.qta = res.qta;
+            window.listaSpesa.refreshOggetto(o.id, o);
+        });
+
+        server.on('inseritoOggettoLista', function(o){
+            window.listaSpesa.addOggetto(new Oggetto(o.ID,o.Nome,o.Note,o.Prezzo,1,false));
         });
         
         server.on('chiusuraLista', function(){

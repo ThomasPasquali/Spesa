@@ -21,6 +21,13 @@ function getDatalistIdTwo(datalist, search) {
     return obj.attr('id');
 };
 
+function getDatalistIdThree(datalist, search) {
+    var obj = $(datalist).find('option').filter(function () {
+        return $(this).text()==search;
+    });
+    return obj.attr('value');
+};
+
 function getDatalistName(datalist, search) {
     var obj = $(datalist).find('option').filter(function () {
         return $(this).attr('data-value')==search;
@@ -43,7 +50,7 @@ function getDatalistName(datalist, search) {
             $.each(data, function(id, oggetto) {
                 var o = new Oggetto(oggetto.ID, oggetto.Nome, oggetto.Note, oggetto.Prezzo, 1);
                 listaAlimenti.addOggetto(oggetto.ID, o);
-                $('#allAlimenti').append( "<option id='" + oggetto.ID + "'>" + oggetto.Nome + "</option>" );
+                $('#allAlimenti').append( "<option data-value='" + oggetto.ID + "'>" + oggetto.Nome + "</option>" );
             });
           }
     });
@@ -72,6 +79,15 @@ function recreateDataListRicette(idGruppo, idSupermercato) {
     });
 }
 
+function is_int(n){
+    if (!is_numeric(n)) return false
+    else return (n % 1 == 0);
+}
+
+function is_numeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
  function recreateSetIngredienti(dati) {
     $('#divIngredienti').empty();
     var pageUrl = '/get/';
@@ -92,19 +108,33 @@ function recreateDataListRicette(idGruppo, idSupermercato) {
     });
 }
 
-function createHTMLForPopup(arrayOggetti) {
-    var html = "<div class='rigaScontrino'><p class='alignleft scontrino'>DESCRIZIONE</p><p class='alignright scontrino'>Prezzo(€)</p></div></div>";
-    $.each(arrayOggetti, function (id, oggetto) {
-        var prezzoTot = oggetto.qta * oggetto.prezzo;
-        var nome = oggetto.nome;
-        var html_temp = `<div class="rigaScontrino"><p style='text-decoration: black;' class='alignleft'>${nome.toUpperCase()}</p><p class='alignright'>${prezzoTot}</p></div></div>`;
-        html += html_temp;
+function submitForm(idSuper, idGruppo, dimLista, form) {
+    var htmlContent = $('<div></div>');
+    var lista = $('<ul></ul>');
+
+    var errMesgNoSuper = "Non è stato selezionato nessun supermercato";
+    var errMesgNoGruppo = "Non è stato associato nessun gruppo alla lista";
+    var errMesgemptyList = "Non è possibile creare una lista vuota";
+
+    if(idSuper==0){
+        $(lista).append($('<li></li>').append(errMesgNoSuper));
+    }
+    if(!idGruppo){
+        $(lista).append($('<li></li>').append(errMesgNoGruppo));
+    }
+    if(dimLista){
+        $(lista).append($('<li></li>').append(errMesgemptyList));
+    }
+    var value = $('#selected').val();
+    alert($('#allAlimenti [value="' + value + '"]').data('value'));
+    $(htmlContent).append($(lista));
+    $.alert({
+        title: 'C\' è ancora qualcosa da sistemare...',
+        content: $(htmlContent),
     });
-    html += ''
-    console.log(arrayOggetti);
-    console.log(html);
-    return html;
-    
+    if(!idSuper==0 && idGruppo && !dimLista){
+        $(form).submit();
+    }
 }
 
-export {validateSelectInput, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, createHTMLForPopup};
+export {validateSelectInput, submitForm, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, is_int};

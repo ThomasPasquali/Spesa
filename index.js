@@ -32,8 +32,14 @@ const SALT_ROUNDS = 3;
 
 /**********CONTROLLO LOGIN (su tutte le pagine tranne login)*********/
 app.use(function(req, res, next) {
+  //FIXME prendere dati da sessione
+  global.user = {
+    name: 'Berga',
+    isAdmin: true,
+    prefGroup: {ID: 1, Nome: 'Il Trio'}
+  };
   next();
-  //FIXME ELIMINAMIIIIIIII
+  //FIXME Uncomment
   /*if(req.session.username || req.originalUrl == '/login')
     next();
   else
@@ -81,23 +87,18 @@ app.get('/hash', function (req, res) {
 
 /***********NUOVA LISTA***********/
 app.get('/newLista', function (req, res) {
-  //FIXME user da sessione
-  const user = 'Berga';
   const supermercati = query.getSupermercati();
-  //FIXME PRENDERE DA SESSIONE
-  const gruppi = query.getGruppiUtente(user, 4);
-  //FIXME PRENDERE DA SESSIONE
-  const prefGroup = {ID : 1, Nome : 'Rekkie'};
-  
+  const gruppi = query.getGruppiUtente(user.name, user.prefGroup.ID);
+
   Promise.all([gruppi, supermercati]).then(function(values) {
     res.render('addLista', {
       title: 'Nuova lista',
       saluto: misc.getSaluto(),
-      user: user,
+      user: user.name,
       displayTitle: '',
       displaySearchBar: 'none;',
       displayConfirmB: '',
-      prefGroup: prefGroup,
+      prefGroup: user.prefGroup,
       allGroups: values[0],
       allSupermercati: values[1]
     });
@@ -107,12 +108,9 @@ app.get('/newLista', function (req, res) {
 
 /*************HOME PAGE***********/
 app.get('/home', function (req, res) {
-  //FIXME user da sessione
-  const user = 'Berga';
-  const listeUtente = query.getListeUtente(user);
+  const listeUtente = query.getListeUtente(user.name);
   listeUtente.then(function(liste) {
     res.render('home', {
-      title: 'Casa pagina',
       saluto: misc.getSaluto(),
       user: user,
       displayTitle: '',
@@ -121,6 +119,15 @@ app.get('/home', function (req, res) {
       listeUtente: liste
     });
   }).catch(function(err) { console.log(err); });
+  
+});
+
+/*************GESTIONE OGGETTI***********/
+app.get('/gestioneOggetti', function (req, res) {
+  res.render('gestioneOggetti', {
+    saluto: misc.getSaluto(),
+    user: user,
+  });
   
 });
 
@@ -157,7 +164,7 @@ app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID)/, 
   
 });
 
-app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista)/, function (req, res) {
+app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOggetto)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -165,7 +172,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista)/, funct
       risposta = query.acquistaOggetto(
         req.body.IDOggetto,
         req.body.IDLista,
-        req.body.IDUtente,
+        user.name,
         req.body.prezoAcquisto
       );
       io.sockets.emit('acquistato', req.body.IDOggetto);
@@ -180,6 +187,32 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista)/, funct
     case 'chiudiLista':
       risposta = query.chiudiLista(req.body.IDLista);
       io.sockets.emit('chiusuraLista');
+      break;
+    case 'qtaOggetto':
+      risposta = query.modificaQtaOggetto(req.body.IDOggetto, req.body.IDLista, req.body.qta);
+      io.sockets.emit('modificaQtaOggetto', {oggetto:req.body.IDOggetto, qta:req.body.qta});
+      break;
+    default: risposta = null; break;
+  }
+  risposta.then((data) => {
+    res.write(JSON.stringify(null));
+    res.end();
+  }).catch((err) => {
+    res.write(JSON.stringify(err));
+    res.end();
+  });
+  
+});
+
+app.post(/\/insert\/(oggettoLista)/, function (req, res) {
+  const richiesta = req.originalUrl.split('/')[2];
+  let risposta;
+  switch (richiesta) {
+    case 'oggettoLista':
+      risposta = query.insertOggettoLista(req.body.IDOggetto, req.body.IDLista, req.body.IDSupermercato, (req.body.qta?1:req.body.qta));
+      query.getOggetto(req.body.IDOggetto).then((o) => {
+        io.sockets.emit('inseritoOggettoLista', o[0]);
+      });
       break;
     default: risposta = null; break;
   }

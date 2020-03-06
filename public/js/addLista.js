@@ -3,7 +3,8 @@
 
 import Oggetto from './classes/Oggetto.js';
 import ListaAddLista from './classes/ListaAddLista.js';
-import {validateSelectInput, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, createHTMLForPopup} from './functionsAddLista.js';
+import {validateSelectInput, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, is_int, submitForm} from './functionsAddLista.js';
+import {createHTMLScontrino} from './misc.js';
 
 let listaAlimenti = new ListaAddLista(null,false);
 
@@ -16,7 +17,7 @@ $(document).ready(function () {
         var divAlimenti = $('#divAlimenti');
         var datalistSupermercati= $('#allSupermercati');
         var datalistAlimenti = $('#allAlimenti');
-        var inputAlimenti = $('#inpuntWithList');
+        let inputAlimenti = $('#inputWithList');
         var contenitoreAlimenti = $('div.lista.master');
         var btnAddRicetta = $('#addRicetta');
         var selectRicetta = $('#selectR');
@@ -24,6 +25,7 @@ $(document).ready(function () {
 
         var savedSelectedSuperMer = 0;
         var savedSelectedGroup = null;
+        var savedSelectedGroupName = null;
 
         let listaSpesa = new ListaAddLista($(contenitoreAlimenti),true);
 
@@ -32,14 +34,11 @@ $(document).ready(function () {
         $('body').on('change', '.alimento.inputWithList', function (e) {
             let valid = validateSelectInput($(datalistAlimenti), $(this).val());
             if(valid){
-                $(this).removeClass().addClass('alimento');
-                $(divAlimenti).removeClass().addClass('alimenti actived');
-                var idCurrAl = getDatalistIdTwo($(datalistAlimenti), $(this).val());
+                var idCurrAl = getDatalistId($(datalistAlimenti), $(this).val());
                 var tempIgr = listaAlimenti.getOggetto(idCurrAl);
                 listaSpesa.addOggetto(idCurrAl, tempIgr);
             }else{
                 $(this).removeClass().addClass('alimento invalid');
-                $(divAlimenti).removeClass().addClass('alimenti blocked');
             }
         });
 
@@ -51,9 +50,11 @@ $(document).ready(function () {
                 if ($(this).is(':checked')) {
                     var nome = $(this).attr('id');
                     var id = $(this).attr('value');
-                    var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente" value="' + id + '" /><label class="utente">' + nome + '</label><button type="button" class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button></div>';
+                    var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente" value="' + id + 
+                                    '" /><label class="utente">' + nome + '</label><button type="button" class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button></div>';
                     e.preventDefault();
                     savedSelectedGroup = id;
+                    savedSelectedGroupName = nome;
                     $(contenitore).append(html);
                 }
             });
@@ -68,6 +69,7 @@ $(document).ready(function () {
             e.preventDefault();
             var id = $(this).parent('div.utente').find('input.utente').attr('value');
             savedSelectedGroup = null;
+            savedSelectedGroupName = null;
             $(radioUtenti).each(function(){
                 if($(this).attr('value') == id){
                     $(this).prop('checked', false);
@@ -89,14 +91,15 @@ $(document).ready(function () {
         // lo rimuove da lista spesa e ridisesgna la lista
         $(contenitoreAlimenti).on('click', '.rmAlimento', function (e) {
             e.preventDefault();
-            var inputVal = $(this).parent('div.alimento').find('.alimento.inpuntWithList').val();
+            var inputVal = $(this).parent('div.alimento').find('.alimento.inputWithList').val();
             var id = getDatalistIdTwo($(datalistAlimenti), inputVal);
             $(this).parent('div.alimento').fadeOut('slow', function () {
                 $(this).remove();
                 listaSpesa.removeOggetto(id);
             }) 
         });
-
+        
+        //Viene selezionato un nuovo supermercato
         $(selectSuperMer).change(function (e) {
             e.preventDefault();
 
@@ -135,14 +138,36 @@ $(document).ready(function () {
             }
         });
 
+        //Change quantità
+        $('body').on('change','.alimento.qta',function (e) {
+            console.log('sjdajdjk');
+            var val = $(this).parent('div.alimento').find('.alimento.inputWithList').val();
+            var id = getDatalistIdTwo($(datalistAlimenti), val);
+            if(is_int($(this).val())){
+                $(this).removeClass().addClass('alimento qta valid');
+                listaSpesa.updateQta(id, $(this).val());
+            }else{
+                listaSpesa.updateQta(id, 0);
+                $.alert({
+                    title: 'Quantità invalida',
+                    content: 'Immettere una quantità valida, grazie',
+                });
+                $(this).addClass('invalid');
+            }
+        })
+
+        //Aggiunta riga vuota per un nuovo alimento
         $(btnAddAlimento).click(function (e) {
             var counter = 0;
-            var html = '<div class="alimento"><input style="width: 200px;" class="alimento inputWithList" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
+            var html = '<div class="alimento"><input style="width: 200px;" class="alimento inputWithList" name="alimento_' + 
+                            counter + '" list="allAlimenti"><input class="alimento qta" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + 
+                                '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
             e.preventDefault();
             $('div.lista.master').append(html);
             $('div.alimento:last-child').hide().fadeIn('slow');
         });
 
+        //Apertura del div collassabile delle ricette
         $(btnAddRicetta).click(function(e){
             var idGruppo = savedSelectedGroup;
             var idSupermercato = savedSelectedSuperMer;
@@ -151,11 +176,14 @@ $(document).ready(function () {
             $('.content-collapsible-ricette').slideDown('slow');
         });
 
+        //Ogni volta che una nuova ricetta viene selezionata viene
+        //ricreato il set di ingredienti associato ad essa
         $(selectRicetta).change(function (e) {
             var idRicetta = getDatalistId($('#allRicette'), $(this).val());
             recreateSetIngredienti({ IDRicetta : idRicetta})
         });
 
+        //Aggiunge i prodotti selezionati alla lista
         $(confirmR).click(function (e) {
             e.preventDefault();
             $('.alimento.checkIngrediente').each(function () {
@@ -168,24 +196,23 @@ $(document).ready(function () {
             $('.content-collapsible-ricette').slideUp('fast');
         });
 
-        //Apre un popup di conferma
+        //Apre uno scontrino, VEROOO!!
         $('#buttonSubmit').click(function (e) {
             e.preventDefault();
             console.log('heila campione!');
-            console.log(listaSpesa);
             $.confirm({
-                title: 'Confirm!',
+                title: '',
                 icon: 'fa fa-shopping-cart',
-                animation: 'bottom',
+                animation: 'rotateX',
                 columnClass: 'medium',
                 closeAnimation: 'top',
                 theme: 'modern',
-                content: createHTMLForPopup(listaSpesa.getOggetti()),
+                content: createHTMLScontrino(savedSelectedGroupName ,window.supermercati, savedSelectedSuperMer, listaSpesa),
                 buttons: {
                     Conferma: {
                         btnClass: 'btn-green',
                         action: function () {
-                            $.alert('Confirmed!');
+                            submitForm(savedSelectedSuperMer, savedSelectedGroup, listaSpesa.vuota, $('#formUtentiAssociati'));
                         }
                     },
                     Cancella: {

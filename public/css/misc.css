@@ -20,3 +20,34 @@
 .dropdown-control {
     cursor: pointer;
 }
+
+.main-container {
+    min-height: 100vh; /* will cover the 100% of viewport */
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-bottom: 100px; /* height of your footer */
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.iconButton {
+    position: relative;
+    width:60px;
+    height:60px;
+    background-color:#005CB9;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+    margin-right: 20px;
+}
+
+.iconButton i {
+    margin-top:22px;
+    color: #f5aa3b;
+}

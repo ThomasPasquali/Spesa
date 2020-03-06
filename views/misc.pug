@@ -26,7 +26,7 @@ mixin navbar(displaySearchBar = 'block')
         a.nav-item.nav-link(href='/home' style='padding: 8px;')
             img(src='/images/eurospin-logo.png', height='44', width='39', class='logo')
         - var displayT = displayTitle;
-        h4(style='margin-left: 8px; margin-right:8px;display: ' + displayT) #{saluto} #{user}
+        h4(style='margin-left: 8px; margin-right:8px;display: ' + displayT) #{saluto} #{user.name}
         div.nav.navbar-nav.float-right
             - var displayR = displaySearchBar;
             .input-group.md-form.form-sm.form-2.pl-0(style='margin: 5px; display: ' + displayR)
@@ -40,3 +40,7 @@ mixin navbar(displaySearchBar = 'block')
 mixin confirmButton(i='fa-check', display='block')
     a#confirmButton.float(style='display:'+display+'; position: absolute; bottom: 15px; right: 15px;')
         i(class='fa my-float '+i)
+
+mixin iconButton(id, i)
+    a.iconButton(id=id)
+        i(class=i)

@@ -7,16 +7,21 @@ export default class ListaAddLista extends Lista{
         super(1);
         this.listaTot = listaTot;
         this.container = container;
+        this.vuota = true;
     }
 
     addOggetto(id, oggetto) {
-        console.log(oggetto);
+        this.vuota = false;
         if(id in super.getOggetti()){
             super.getOggetti()[id].qta += oggetto.qta;
         }else{
             super.getOggetti()[id] = oggetto;
         }
         this.recreateLista();
+    }
+
+    updateQta(id, qta){
+        super.getOggetti()[id].setQta(qta);
     }
 
     removeOggetto(id){
@@ -34,7 +39,7 @@ export default class ListaAddLista extends Lista{
             $(this.container).empty();
             var counter = 0;
             $.each(this.getOggetti(), function (id , alimento) { 
-                var html = '<div class="alimento"><input style="width: 200px;" class="alimento inpuntWithList" value="'+ alimento.nome +'" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento" style="width: 60px;" list="listaQuantita" value="'+ alimento.qta +'" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
+                var html = '<div class="alimento"><input style="width: 200px;" class="alimento inputWithList blocked" value="'+ alimento.nome +'" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento qta" style="width: 60px;" value="'+ alimento.qta +'" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
                 $(c).append(html);
                 counter++;
             });

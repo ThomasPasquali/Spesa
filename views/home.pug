@@ -8,7 +8,7 @@ html
         +bootstrap
         +fontawesome
         link(rel='stylesheet',type='text/css',href='/css/misc.css')
-        script(src='/js/misc.js')
+        script(src='/js/misc.js' type='module')
     body
         +navbar('none')
         .flex-vertical
@@ -18,8 +18,11 @@ html
             #liste.flex-vertical
                 each lista in listeUtente
                     a(href='/spesa/' + lista.ID)=lista.Nome
+                    
             .flex.dropdown-control(data-target='#operazioni')
                 i.fas.fa-caret-down
                 h2 Operazioni
-            #operazioni
+            #operazioni.flex-vertical
                 a(href="/newLista") Crea una nuova lista
+                if user.isAdmin
+                    a(href="/gestioneOggetti") Gestisci oggetti e supermercacti

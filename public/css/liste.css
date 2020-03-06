@@ -67,12 +67,12 @@
     color: #c12e2a;
   }
 
-  div.blocked{
+  .blocked{
     pointer-events: none; 
     opacity: 0.4;
   }
 
-  div.actived{
+  .actived{
     pointer-events: all; 
     opacity: 1;
   }
@@ -169,34 +169,52 @@
   }
 
   .alignleft {
-    float: left;
     text-align: left;
+    align-self: flex-start;
     width: 50%;
-    font-family: 'Courier New', Courier, monospace;
-    text-decoration: black;
-    font-size: large;
-    display: block;
+    display: inline-block;
     -webkit-font-smoothing : none;
   }
   .alignright {
     text-align: right;
-    float: right;
+    align-self: flex-end;
     text-decoration: black;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: large;
     width: 50%;
-    display: block;
+    display: inline-block;
     -webkit-font-smoothing : none;
   }
 
-  .scontrino{
+  .scontrinoSmall{
+    font-size: small;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .scontrinoMedium{
+    font-size: medium;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .scontrinoLarge{
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .scontrinoXXLarge{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: xx-large;
+  }
+
+  .scontrinoXLarge{
     font-size: x-large;
+    font-family: 'Courier New', Courier, monospace;
   }
 
-  div.rigaScontrino{
-    display: block;
+  row.scontrino{
+    display: inline;
   }
 
-  p.rigaScontrino{
+  div.scontrino{
+    display: flex;
+    flex-direction: column;
     
   }

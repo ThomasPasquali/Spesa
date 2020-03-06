@@ -1,14 +1,18 @@
 
 export default class Oggetto{
 
-    constructor(id, nome, note, prezzo, qta, acquistato = null, element = null){
-        this.id = id;
+    constructor(id, nome, note, prezzo, qta, acquistato = null){
+        this.id = parseInt(id);
         this.nome = nome;
         this.note = note;
-        this.prezzo = prezzo;
-        this.qta = qta;
-        this.acquistato = acquistato;
-        this.element = element;
+        this.prezzo = parseFloat(prezzo);
+        this.qta = parseInt(qta);
+        this.acquistato = acquistato?true:false;
+        this.element = null;
+    }
+
+    setQta(qta){
+        this.qta=qta;
     }
     
 }

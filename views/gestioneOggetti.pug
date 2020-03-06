@@ -1,0 +1,18 @@
+include misc
+doctype mobile
+html
+    head
+        title Gestione oggetti e supermercacti 
+        meta(charset='UTF-8')
+        +jquery
+        +bootstrap
+        +fontawesome
+        +jqueryConfirm
+        link(rel='stylesheet',type='text/css',href='/css/misc.css')
+        script(src='/js/misc.js' type="module")
+    body
+        .main-container
+            header
+                +navbar('none')
+            #supermercati.flex-vertical
+               

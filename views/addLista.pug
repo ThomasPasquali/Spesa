@@ -13,6 +13,8 @@ html
     body
         +navbar('none')
         h3(style='margin: 8px;') Crea una nuova lista
+        script.
+            supermercati = !{JSON.stringify(allSupermercati)};
         div.utentiAssociati
             form.utenti(id='formUtentiAssociati' method='GET')
                 h5 Dagli un nome:
@@ -75,9 +77,5 @@ html
             datalist(id='allAlimenti')
             
             datalist(id='allRicette')
-
-            datalist(id='listaQuantita')
-                each number in [1,2,3,4,5]
-                    option(data-value=number)=number
         div(id='buttonSubmit')
             +confirmButton
