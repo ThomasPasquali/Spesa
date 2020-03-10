@@ -35,7 +35,7 @@ function getDatalistName(datalist, search) {
     return obj.val();
 };
 
- function recreateDataListAlimenti(listaAlimenti, dati) {
+function recreateDataListAlimenti(listaAlimenti, dati) {
     $('#allAlimenti').empty();
     var pageUrl = '/get/';
     var request = 'oggettiSupermercato';
@@ -108,14 +108,23 @@ function is_numeric(n) {
     });
 }
 
-function submitForm(idSuper, idGruppo, dimLista, form) {
+function isInputEmpty(inputSelector) {
+    let contenuto = $(inputSelector).val();
+    return contenuto == "";
+}
+
+function submitForm(idSuper, idGruppo, nomeLista, dimLista, form, listaSpesa, listaSuper) {
     var htmlContent = $('<div></div>');
     var lista = $('<ul></ul>');
 
     var errMesgNoSuper = "Non è stato selezionato nessun supermercato";
     var errMesgNoGruppo = "Non è stato associato nessun gruppo alla lista";
     var errMesgemptyList = "Non è possibile creare una lista vuota";
+    var errMesgemptyNameList = "Non è possibile creare una lista senza un nome valido";
 
+    if(nomeLista==""){
+        $(lista).append($('<li></li>').append(errMesgemptyNameList));
+    }
     if(idSuper==0){
         $(lista).append($('<li></li>').append(errMesgNoSuper));
     }
@@ -126,15 +135,46 @@ function submitForm(idSuper, idGruppo, dimLista, form) {
         $(lista).append($('<li></li>').append(errMesgemptyList));
     }
     var value = $('#selected').val();
-    alert($('#allAlimenti [value="' + value + '"]').data('value'));
     $(htmlContent).append($(lista));
-    $.alert({
-        title: 'C\' è ancora qualcosa da sistemare...',
-        content: $(htmlContent),
-    });
-    if(!idSuper==0 && idGruppo && !dimLista){
-        $(form).submit();
+    
+    if(!idSuper==0 && idGruppo && !dimLista && !nomeLista==""){
+        var formStringify = $(form).serialize();
+        console.log(formStringify);
+        formStringify = replaceWithId(formStringify, listaSpesa, listaSuper);
+        console.log(formStringify);
+        //$(form).submit();
+    }else{
+        $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'C\'è ancora qualcosa da sistemare...',
+            content: htmlContent,
+            theme: 'modern',
+            type: 'red',
+            columnClass: 'medium',
+            typeAnimated: true,
+            buttons: {
+                tryAgain: {
+                    text: 'Sistemo subito!',
+                    btnClass: 'btn-red',
+                }
+            }
+        });
     }
+}
+
+function replaceWithId(string, listaSpesa, datalistSuper) {
+    var s = string;
+    $.each(listaSpesa.getOggetti(), function(id, oggetto){
+        var nome = oggetto.nome;
+        nome = nome.replace(' ', '%20');
+        s = s.replace(nome, id);
+    })
+    $(datalistSuper).each(function () {
+        var nome = $(this).val();
+        nome = nome.replace(' ', '%20');
+        s = s.replace(nome, $(this).attr('data-value'));
+    })
+    return s;
 }
 
 export {validateSelectInput, submitForm, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, is_int};

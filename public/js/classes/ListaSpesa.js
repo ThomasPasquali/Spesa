@@ -1,6 +1,6 @@
 import Oggetto from './Oggetto.js';
 import Lista from './Lista.js';
-import {getIDfromDatalist} from '../misc.js';
+import {getIDfromDatalist, sendRequest} from '../misc.js';
 
 export default class ListaSpesa extends Lista{
 
@@ -24,7 +24,7 @@ export default class ListaSpesa extends Lista{
 
     addOggetto(oggetto, modificaDB = false) {
         if(!this.getOggetto(oggetto.id) && modificaDB) {
-            this.sendRequest('/insert/oggettoLista', {
+            sendRequest('/insert/oggettoLista', {
                 IDOggetto: oggetto.id,
                 IDLista: this.getID(),
                 IDSupermercato: this.idSupermercato,
@@ -35,7 +35,7 @@ export default class ListaSpesa extends Lista{
             oggetto = this.getOggetto(oggetto.id);
             if(esistente) {
                 if(modificaDB)
-                    this.sendRequest('/update/qtaOggetto', {
+                    sendRequest('/update/qtaOggetto', {
                         IDOggetto: oggetto.id,
                         IDLista: this.getID(),
                         qta: oggetto.qta
@@ -84,9 +84,9 @@ export default class ListaSpesa extends Lista{
                                 reject();
                         }
                     });
-                }else resolve(prezzo);
+                }else resolve(null);
             }).then((prezzo) => {
-                lista.sendRequest('/update/acquistaOggetto',{
+                sendRequest('/update/acquistaOggetto',{
                     IDOggetto:o.id,
                     IDLista:lista.getID(),
                     prezoAcquisto:prezzo
@@ -112,14 +112,14 @@ export default class ListaSpesa extends Lista{
             o.acquistato = false;
             o.element.prependTo(this.divOggettiDaAcquistare);
             this.refreshOggetto(id, o);
-            if(this.isTuttoAcquistato()) this.bottoneChiusura.hide();
+            if(!this.isTuttoAcquistato()) this.bottoneChiusura.hide();
         }
     }
 
     annullaAcquistoOggetto(id) {
         var o = super.getOggetto(id);
         if(o)
-            this.sendRequest('/update/annullaAcquistoOggetto', {
+            sendRequest('/update/annullaAcquistoOggetto', {
                 IDOggetto:o.id,
                 IDLista:super.getID()
             }).catch((err) => { alert('EVVOVE'); console.log(err); });
@@ -127,7 +127,7 @@ export default class ListaSpesa extends Lista{
 
     refreshLista() {
         var lista = this;
-        this.sendRequest('/get/oggettiLista', { IDLista: lista.getID() }).then((oggetti) => {
+        sendRequest('/get/oggettiLista', { IDLista: lista.getID() }).then((oggetti) => {
             this.divOggettiDaAcquistare.empty();
             this.divOggettiAcquistati.empty();
             for (const o of oggetti) {
@@ -173,7 +173,7 @@ export default class ListaSpesa extends Lista{
                         keys: ['enter'],
                         btnClass: 'btn-red',
                         action: () => {
-                            lista.sendRequest('/update/chiudiLista', {
+                            sendRequest('/update/chiudiLista', {
                                 IDLista: lista.getID()
                             }).then(() => {
                                 lista.bloccaPagina();
@@ -234,9 +234,10 @@ export default class ListaSpesa extends Lista{
                     text: 'Conferma',
                     action: function() {
                         let idOggetto = getIDfromDatalist(datalist, search.val());
-                        if(idOggetto)
+                        if(idOggetto) {
                             lista.addOggetto(listaTmp.getOggetto(idOggetto), true);
-                        else
+                            lista.moveToNonAcquistati(idOggetto);
+                        }else
                             return false;
                     }
                 },
@@ -244,20 +245,6 @@ export default class ListaSpesa extends Lista{
                     text: 'Annulla'
                 }
             }
-        });
-    }
-
-    sendRequest(url, data, method="POST") {
-        return new Promise((resolve, reject) => {
-            $.ajax(url, {
-                type: method,
-                dataType: "json",
-                data: data
-            }).done((res) =>{
-                resolve(res);
-            }).fail((err) => {
-                reject(err);
-            });
         });
     }
 

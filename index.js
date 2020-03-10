@@ -6,7 +6,7 @@ const body_parser = require('body-parser');
 const url = require('url');
 const Cookies = require('cookies');
 const crypto = require('crypto');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const favicon = require('serve-favicon');
 const fs = require('fs');
 const ini = require('ini');
@@ -144,7 +144,7 @@ app.get(/\/spesa\/\d+/, function (req, res) {
 });
 
 /*************RUNTIME REQUESTS***********/
-app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID)/, function (req, res) {
+app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID|supermercati|oggetti)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -152,6 +152,8 @@ app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID)/, 
     case 'oggettiLista': risposta = query.getOggettiLista(req.body.IDLista); break;
     case 'ricetteGruppo': risposta = query.getRicetteGruppo(req.body.IDGruppo, req.body.IDSupermercato); break;
     case 'ricettaByID' : risposta = query.getOggettiRicetta(req.body.IDRicetta); break;
+    case 'supermercati': risposta = query.getSupermercati(); break;
+    case 'oggetti': risposta = query.getOggetti(); break;
     default: risposta = null; break;
   }
   risposta.then((data) => {
@@ -164,7 +166,7 @@ app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID)/, 
   
 });
 
-app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOggetto)/, function (req, res) {
+app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOggetto|oggetto)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -192,6 +194,9 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
       risposta = query.modificaQtaOggetto(req.body.IDOggetto, req.body.IDLista, req.body.qta);
       io.sockets.emit('modificaQtaOggetto', {oggetto:req.body.IDOggetto, qta:req.body.qta});
       break;
+    case 'oggetto':
+      risposta = query.updateOggetto(req.body.ID, req.body.Nome, req.body.Note, req.body.Prezzo);
+      break;
     default: risposta = null; break;
   }
   risposta.then((data) => {
@@ -204,7 +209,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
   
 });
 
-app.post(/\/insert\/(oggettoLista)/, function (req, res) {
+app.post(/\/insert\/(oggettoLista|oggetto)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -214,10 +219,13 @@ app.post(/\/insert\/(oggettoLista)/, function (req, res) {
         io.sockets.emit('inseritoOggettoLista', o[0]);
       });
       break;
+    case 'oggetto':
+      risposta = query.insertOggetto(req.body.nome, req.body.note, req.body.prezzo, req.body.supermercato);
+      break;
     default: risposta = null; break;
   }
   risposta.then((data) => {
-    res.write(JSON.stringify(null));
+    res.write(JSON.stringify(data));
     res.end();
   }).catch((err) => {
     res.write(JSON.stringify(err));

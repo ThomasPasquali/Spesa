@@ -8,6 +8,7 @@ export default class ListaAddLista extends Lista{
         this.listaTot = listaTot;
         this.container = container;
         this.vuota = true;
+        this.counterAlimenti = 0;
     }
 
     addOggetto(id, oggetto) {
@@ -16,6 +17,8 @@ export default class ListaAddLista extends Lista{
             super.getOggetti()[id].qta += oggetto.qta;
         }else{
             super.getOggetti()[id] = oggetto;
+            this.counterAlimenti++;
+            this.updateListaVuota()
         }
         this.recreateLista();
     }
@@ -25,8 +28,17 @@ export default class ListaAddLista extends Lista{
     }
 
     removeOggetto(id){
+        if(id in super.getOggetti()){
+            this.counterAlimenti--;
+            this.updateListaVuota();
+        }
         super.removeOggetto(id);
         this.recreateLista();
+    }
+
+    updateListaVuota(){
+        this.vuota = this.counterAlimenti == 0;
+ 
     }
 
     getOggetto(id){

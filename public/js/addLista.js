@@ -92,7 +92,7 @@ $(document).ready(function () {
         $(contenitoreAlimenti).on('click', '.rmAlimento', function (e) {
             e.preventDefault();
             var inputVal = $(this).parent('div.alimento').find('.alimento.inputWithList').val();
-            var id = getDatalistIdTwo($(datalistAlimenti), inputVal);
+            var id = getDatalistId($(datalistAlimenti), inputVal);
             $(this).parent('div.alimento').fadeOut('slow', function () {
                 $(this).remove();
                 listaSpesa.removeOggetto(id);
@@ -139,10 +139,10 @@ $(document).ready(function () {
         });
 
         //Change quantità
-        $('body').on('change','.alimento.qta',function (e) {
+        $('body').on('change', '.alimento.qta',function (e) {
             console.log('sjdajdjk');
             var val = $(this).parent('div.alimento').find('.alimento.inputWithList').val();
-            var id = getDatalistIdTwo($(datalistAlimenti), val);
+            var id = getDatalistId($(datalistAlimenti), val);
             if(is_int($(this).val())){
                 $(this).removeClass().addClass('alimento qta valid');
                 listaSpesa.updateQta(id, $(this).val());
@@ -160,7 +160,7 @@ $(document).ready(function () {
         $(btnAddAlimento).click(function (e) {
             var counter = 0;
             var html = '<div class="alimento"><input style="width: 200px;" class="alimento inputWithList" name="alimento_' + 
-                            counter + '" list="allAlimenti"><input class="alimento qta" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + 
+                            counter + '" list="allAlimenti"><input class="alimento qta blocked" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + 
                                 '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
             e.preventDefault();
             $('div.lista.master').append(html);
@@ -199,7 +199,6 @@ $(document).ready(function () {
         //Apre uno scontrino, VEROOO!!
         $('#buttonSubmit').click(function (e) {
             e.preventDefault();
-            console.log('heila campione!');
             $.confirm({
                 title: '',
                 icon: 'fa fa-shopping-cart',
@@ -207,12 +206,12 @@ $(document).ready(function () {
                 columnClass: 'medium',
                 closeAnimation: 'top',
                 theme: 'modern',
-                content: createHTMLScontrino(savedSelectedGroupName ,window.supermercati, savedSelectedSuperMer, listaSpesa),
+                content: createHTMLScontrino(savedSelectedGroupName ,window.supermercati, savedSelectedSuperMer,$('#nomeLista').val(), listaSpesa),
                 buttons: {
                     Conferma: {
                         btnClass: 'btn-green',
                         action: function () {
-                            submitForm(savedSelectedSuperMer, savedSelectedGroup, listaSpesa.vuota, $('#formUtentiAssociati'));
+                            submitForm(savedSelectedSuperMer, savedSelectedGroup, $('#nomeLista').val(), listaSpesa.vuota, $('#formUtentiAssociati'), listaSpesa, $('#allSupermercati'));
                         }
                     },
                     Cancella: {

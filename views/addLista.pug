@@ -18,7 +18,7 @@ html
         div.utentiAssociati
             form.utenti(id='formUtentiAssociati' method='GET')
                 h5 Dagli un nome:
-                input.n(style='margin: 14px' name='nomeLista' placeholder='Nuovo')
+                input.n(style='margin: 14px' id='nomeLista' name='nomeLista' placeholder='Nuovo')
                 h5 Gruppi di utenti con il permesso di modificarla:
                 div.utenti.master
                 div
@@ -66,9 +66,8 @@ html
                                 h7.red-triangle(style='margin-left: 5px;') Selezionare un gruppo di utenze
                             div.ingredienti(id='divIngredienti')
                             button.aggiungi.right(id='confirmRicette') OK
-                
                 h5 Richiesta prezzo effettivo oggetti
-                    input(type="checkbox" name="prezzi_effettivi")
+                input(type="checkbox" name="prezzi_effettivi")
 
             datalist(id='allSupermercati')
                 each supermercato in allSupermercati

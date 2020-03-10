@@ -12,7 +12,7 @@ export default class Oggetto{
     }
 
     setQta(qta){
-        this.qta=qta;
+        this.qta=parseInt(qta);
     }
     
 }

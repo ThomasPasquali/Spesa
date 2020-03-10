@@ -1,3 +1,17 @@
+function sendRequest(url, data, method="POST") {
+    return new Promise((resolve, reject) => {
+        $.ajax(url, {
+            type: method,
+            dataType: "json",
+            data: data
+        }).done((res) =>{
+            resolve(res);
+        }).fail((err) => {
+            reject(err);
+        });
+    });
+}
+
 function getIDfromDatalist(datalist, search) {
     return $(datalist).find('option').filter(function () {
         return $(this).text()==search;
@@ -19,21 +33,23 @@ $(document).ready(() => {
 
 });
 
-function createHTMLScontrino(nomeGruppo, supers, idSuper, listaSpesa, timestampCreazione=null) {
+function createHTMLScontrino(nomeGruppo, supers, idSuper, nomeLista, listaSpesa, timestampCreazione=null) {
     var supermercato;
     $.each(supers, function (index, superm) {
         if(superm.ID==idSuper){
             supermercato = superm;
         }
     });
-    var gruppo = setGruppoScontrino(nomeGruppo);
+    var gruppo = beautifyUndefined(nomeGruppo);
     var timestamp = setTimetampScontrino(timestampCreazione);
-    var piva = setPIVAScontrino(supermercato); 
+    var piva = beautifyUndefined(randomPIVAScontrino());
+    var nomeL = beautifyUndefined(nomeLista);
     supermercato = setAttrSupermercatoScontrino(supermercato);
     var html = `<div class='scontrino'><table><row class='scontrino'><p class='scontrinoXXLarge'>${supermercato.Nome}</p></row>`;
     html += `<row class='scontrino'><p class='scontrinoXLarge'>${supermercato.Localita}</p></row>`;
     html += `<row class='scontrino'><p class='scontrinoLarge'>${supermercato.Citta}</p></row>`;
     html += `<row class='scontrino'><p class='scontrinoLarge'>P.IVA ${piva}</p></row>`;
+    html += `<row class='scontrino'><p class='scontrinoLarge'>Lista ${nomeL}</p></row>`;
     html += rigaVuota();
     html += "<row class='scontrino'><p class='alignleft scontrinoLarge'>DESCRIZIONE</p><p class='alignright scontrinoLarge'>Prezzo(€)</p></div></div></row>";
     var sommaCalcolata = 0;
@@ -69,8 +85,8 @@ function rigaVuota() {
     return '<row class="scontrino"><p class="scontrinoLarge"><br></p></row>';
 }
 
-function setGruppoScontrino(gruppo) {
-    var g = gruppo;
+function beautifyUndefined(string) {
+    var g = string;
     if(!g){
         g = '-';
     }
@@ -88,14 +104,6 @@ function setAttrSupermercatoScontrino(s) {
     return s;
 }
 
-function setPIVAScontrino(s) {
-    var piva = randomPIVAScontrino();
-    if(!s){
-        piva = '-';
-    }
-    return piva;
-}
-
 function randomPIVAScontrino() {
     var piva = '';
     var step;
@@ -105,4 +113,4 @@ function randomPIVAScontrino() {
     return piva;
 }
 
-export {getIDfromDatalist, createHTMLScontrino};
+export {getIDfromDatalist, createHTMLScontrino, sendRequest};
