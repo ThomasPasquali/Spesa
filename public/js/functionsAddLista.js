@@ -134,7 +134,6 @@ function submitForm(idSuper, idGruppo, nomeLista, dimLista, form, listaSpesa, li
     if(dimLista){
         $(lista).append($('<li></li>').append(errMesgemptyList));
     }
-    var value = $('#selected').val();
     $(htmlContent).append($(lista));
     
     if(!idSuper==0 && idGruppo && !dimLista && !nomeLista==""){
@@ -142,7 +141,7 @@ function submitForm(idSuper, idGruppo, nomeLista, dimLista, form, listaSpesa, li
         console.log(formStringify);
         formStringify = replaceWithId(formStringify, listaSpesa, listaSuper);
         console.log(formStringify);
-        //$(form).submit();
+        sendFormString(formStringify);
     }else{
         $.confirm({
             icon: 'fa fa-exclamation-triangle',
@@ -162,6 +161,56 @@ function submitForm(idSuper, idGruppo, nomeLista, dimLista, form, listaSpesa, li
     }
 }
 
+
+function sendFormString(formString){
+    $.ajax({
+        url : '/insert/nuovaLista',
+        method : 'POST',
+        dataType : 'json',
+        data : formString,
+        success : function (data) {
+            if(data.errno){
+                console.log(data.sqlMessage);
+                $.confirm({
+                    icon: 'fa fa-frown',
+                    title: 'Qualcosa è andato storto',
+                    content: data.code,
+                    theme: 'modern',
+                    type: 'red',
+                    columnClass: 'small',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'Torna indietro',
+                            btnClass: 'btn-red'
+                        }
+                    }
+                })
+            }else{
+                $.confirm({
+                    icon: 'fa fa-check',
+                    title: '',
+                    content: 'Lista creata con successso!',
+                    theme: 'modern',
+                    type: 'green',
+                    columnClass: 'small',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'Torna alla home',
+                            btnClass: 'btn-green',
+                            action: function () {
+                                window.location.href = '\\';
+                            }
+                        }
+                    }
+                })
+            }
+        }
+    })
+}
+
+
 function replaceWithId(string, listaSpesa, datalistSuper) {
     var s = string;
     $.each(listaSpesa.getOggetti(), function(id, oggetto){
@@ -169,7 +218,7 @@ function replaceWithId(string, listaSpesa, datalistSuper) {
         nome = nome.replace(' ', '%20');
         s = s.replace(nome, id);
     })
-    $(datalistSuper).each(function () {
+    $(datalistSuper).children('option').each(function () {
         var nome = $(this).val();
         nome = nome.replace(' ', '%20');
         s = s.replace(nome, $(this).attr('data-value'));
@@ -177,4 +226,4 @@ function replaceWithId(string, listaSpesa, datalistSuper) {
     return s;
 }
 
-export {validateSelectInput, submitForm, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, is_int};
+export {validateSelectInput, getDatalistId, getDatalistIdTwo, getDatalistName, recreateSetIngredienti, recreateDataListRicette, recreateDataListAlimenti, is_int, submitForm}

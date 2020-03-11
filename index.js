@@ -128,7 +128,18 @@ app.get('/gestioneOggetti', function (req, res) {
     saluto: misc.getSaluto(),
     user: user,
   });
-  
+});
+
+/*************GESTIONE UTENTE***********/
+app.get('/gestioneUtenze', function (req, res) {
+  const allGroups = query.getGruppi();
+  allGroups.then(function(groups) {
+    res.render('gestioneUtenti', {
+      saluto: misc.getSaluto(),
+      user: user,
+      groups: groups
+    });
+  }).catch(function(err) { console.log(err); });
 });
 
 /*************SPESA***********/
@@ -209,7 +220,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
   
 });
 
-app.post(/\/insert\/(oggettoLista|oggetto)/, function (req, res) {
+app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -221,6 +232,17 @@ app.post(/\/insert\/(oggettoLista|oggetto)/, function (req, res) {
       break;
     case 'oggetto':
       risposta = query.insertOggetto(req.body.nome, req.body.note, req.body.prezzo, req.body.supermercato);
+      break;
+    case 'nuovaLista':
+      var rP = false;
+      if (req.body.richiedi_prezzi) {rP=true}
+      risposta = query.addLista(req.body.nomeLista,req.body.groupLinked, req.body.supermercato, rP).then(function (ris) {
+            var r;
+            for (let [idAlimento, qta] of Object.entries(misc.getAlimentiAndQta(req.body))){
+              r = query.insertOggettoLista(idAlimento,ris.insertId, req.body.supermercato, qta);
+            }
+            return r;
+        }).catch((err)=>{return err;});
       break;
     default: risposta = null; break;
   }

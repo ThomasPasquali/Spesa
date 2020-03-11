@@ -1,0 +1,34 @@
+/*
+    @author : davideberga0
+    @content : Css della pagina 'Gestione Utenze'
+*/
+
+
+
+div.cards{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+div.groupCard {
+    background-color: coral;
+    border-radius: 1rem;
+    flex-basis: 170px;
+    display: inline-flex;
+    padding: 5px;
+    margin: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+div.groupCard.title{
+    align-items: center;
+    justify-content: center;
+}
+
+div.groupCard.button{
+    align-items: center;
+    justify-content: center;
+}
