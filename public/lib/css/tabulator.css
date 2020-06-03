@@ -1,0 +1,63 @@
+/*
+SEE http://tabulator.info/docs/4.0/style
+*/
+:root {
+    --header-bg-color: rgb(129, 189, 129);
+
+    --odd-bg-color: rgb(61, 104, 139, 0.8);
+
+    --even-bg-color: rgb(126, 61, 139);
+
+    --cell-bg-color: rgb(18, 150, 95);
+
+    --font-color: rgb(1,2,3);
+}
+
+/*Main container*/
+.tabulator {
+    width: 70vh;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 2px black;
+}
+
+.tabulator *{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/*Titoli delle colonne: TESTO*/
+.tabulator-col-title {
+    color: chocolate;
+}
+
+/*Titoli delle colonne: CONTENUTO*/
+.tabulator-col-content {
+    background-color: var(--header-bg-color);
+}
+
+/*Gruppi*/
+.tabulator-group {
+    border-radius: 20px;
+}
+
+/*Gruppi pari*/
+.tabulator-group:nth-child(even) {
+    background-color: var(--even-bg-color);
+}
+
+
+/*Gruppi dispari*/
+.tabulator-row.tabulator-group:nth-child(odd) {
+    background-color: var(--odd-bg-color);
+}
+
+/*Celle*/
+.tabulator-cell {
+    border-radius: 50px;
+    background-color: var(--cell-bg-color);
+}
+
+.tabulator-cell,
+.tabulator-col-content{
+    text-align: center;
+}

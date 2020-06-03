@@ -2,33 +2,138 @@
     @author : davideberga0
     @content : Css della pagina 'Gestione Utenze'
 */
-
-
-
 div.cards{
     display: flex;
-    flex-direction: row;
-    padding: 0;
-    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 2rem;
 }
 
 div.groupCard {
     background-color: coral;
+    flex-basis: 1rem;
+    display: flex;
+    flex-direction:  column;
     border-radius: 1rem;
-    flex-basis: 170px;
-    display: inline-flex;
-    padding: 5px;
-    margin: 5px;
-    align-items: center;
-    justify-content: center;
+    margin: 0.5rem;
 }
 
-div.groupCard.title{
-    align-items: center;
-    justify-content: center;
+div.groupCard.titleButton{
+    display: flex;
+    flex-direction:  row;
 }
 
-div.groupCard.button{
-    align-items: center;
-    justify-content: center;
+div.title{
+  align-self: flex-start;
+  flex-basis: 10rem;
+}
+
+div.button button{
+  align-self: flex-end;
+  background-color: transparent;
+  border-width: 0ch;
+}
+
+div.utenti{
+  display: block;
+  margin: 0.5rem;
+}
+
+div.utente{
+  width: 50%;
+  flex-basis: 20%;
+  display: flex;
+  margin: 0.2rem;
+  background-color: #5e5e5e;
+  border-radius: 20px;
+  border-width: 0px;
+}
+
+label.utente{
+  background-color: rgba(0,0,0,0.0);
+  display: inline-block;
+  width: 100%;
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+  border-width: 0px;
+  text-align: left;
+}
+
+
+input.invalid{
+  color: #c12e2a;
+}
+
+.blocked{
+  pointer-events: none; 
+  opacity: 0.4;
+}
+
+.actived{
+  pointer-events: all; 
+  opacity: 1;
+}
+
+button.utente{
+  position: relative;
+  background-color: #c12e2a;
+  width: 24px;
+  height: 24px;
+  border-width: 0ch;
+  align-self: flex-end;
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  border-radius: 100%;
+}
+
+i.rimuovi{
+  background-color: rgba(0,0,0,0.0);
+  color: whitesmoke;
+}
+
+button.aggiungi{
+  background-color: #005CB9;
+  color: #f5aa3b;
+  padding: 5px;
+  display: inline;
+  margin: 10px;
+  text-align: center;
+  line-height: 50%;
+  border-radius: 20px;
+}
+
+.alignleft {
+  text-align: left;
+  align-self: flex-start;
+  width: 50%;
+  display: inline-block;
+  -webkit-font-smoothing : none;
+}
+
+.alignright {
+  text-align: right;
+  text-decoration: black;
+  display: inline-block;
+  width: 50%;
+  -webkit-font-smoothing : none;
+}
+
+i.aggiungi{
+  background-color: rgba(0,0,0,0.0);
+  margin-left: 8px;
+  color: #f5aa3b;
+}
+
+span.utente{
+  display: inline;
+  margin: 5px;
+}
+
+input.utente{
+  margin: 8px; 
+  display: inline;
+}
+
+div.utente:hover{
+  background-color: #3c3c3c;
 }

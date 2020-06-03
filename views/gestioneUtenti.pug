@@ -8,17 +8,15 @@ html
         +bootstrap
         +fontawesome
         link(rel='stylesheet',type='text/css',href='/css/gruppi.css')
-        script(src='/js/misc.js' type='module')
+        script(src='/js/gestioneUtenti.js' type='module')
     body
         +navbar('none')
         div.cards
             each g in groups
-                div.groupCard
-                    div.groupCard.title
-                        h4=g.Nome
-                    br
-                    div.groupCard.button
-                        button
-                            i.fa.fa-plus
-
+                div.groupCard.container(id='' + g.ID)
+                    div.groupCard.titleButton
+                        h4.title.alignleft=g.Nome
+                        div.button.alignright(id='button_'+g.ID)
+                            +caricamento
+                    div.utenti(style='display: none;', id='utenti_'+g.ID)
         

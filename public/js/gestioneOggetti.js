@@ -16,9 +16,9 @@ $(document).ready(async function() {
             {field: 'SupermercatoID', visible: false},
             {field: 'ID', visible: false},
             {field: 'Supermercato', visible: false},
-            {title: 'Nome', field: 'Nome', editor: 'input'},
-            {title: 'Note', field: 'Note', editor: 'input'},
-            {title: 'Prezzo', field: 'Prezzo', editor: 'number', editorParams: {min: 0.05, max: 999.99, step: 0.05}},
+            {title: 'Nome', field: 'Nome', editor: 'input', widthGrow:5},
+            {title: 'Note', field: 'Note', editor: 'input', minWidth: '80px'},
+            {title: 'Prezzo €', field: 'Prezzo', editor: 'number', editorParams: {min: 0.05, max: 999.99, step: 0.05}, minWidth: '80px'},
         ],
         cellEdited: (cell) => {
             sendRequest('/update/oggetto', cell._cell.row.data);

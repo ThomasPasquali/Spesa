@@ -1,0 +1,11 @@
+@keyframes scampa {
+    15% {
+       transform: translateX(-10px); 
+    }
+    25% {
+        transform: rotateZ(-40deg);
+    }
+    100% {
+        transform: translateX(2000px);
+    }
+}

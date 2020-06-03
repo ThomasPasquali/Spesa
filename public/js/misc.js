@@ -30,8 +30,44 @@ $(document).ready(() => {
             $(this).children('i').removeClass().addClass('fas fa-caret-down')
         }
     });
-
 });
+
+function requestUsers(id){
+    $.ajax({
+        url : '/get/utentiDiUnGruppo',
+        data : {
+            IDGruppo : id
+        },
+        method : 'POST',
+        dataType: 'json',
+        success : function (data) {
+            var groups= new Set();
+            $.each(data, function(id, utente) {
+                groups.add(utente.IDGruppo);
+                var html = '<div class="utente"><button type="button" class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button><input class="utente" type="hidden" readonly="readonly" name="utente" value="' + utente.Nome + 
+                                        '" /><label class="utente">' + utente.Nome + '</label></div>'
+                $('#utenti_' + utente.IDGruppo).append(html);
+            });
+            var btnDownHTML = '<button type="button"><i class="fa fa-angle-down"></i></button>';
+            var newUpHTML = '<button type="button"><i class="fa fa-angle-up"></i></button>';
+            groups.forEach(function (IDGruppo) {
+                $('#button_' + IDGruppo).empty().append(btnDownHTML);
+                $('#button_' + IDGruppo).click(function () {
+                    $('#utenti_' + IDGruppo).toggle('slow');
+                    changeClass('#button_' + IDGruppo, btnDownHTML, newUpHTML);
+                })
+            })
+        }
+    });
+}
+
+function changeClass(button, class1, class2){
+    if($(button).find('i').attr('class')=='fa fa-angle-up'){
+        $(button).empty().append(class1);
+    }else{
+        $(button).empty().append(class2);
+    }
+}
 
 function createHTMLScontrino(nomeGruppo, supers, idSuper, nomeLista, listaSpesa, timestampCreazione=null) {
     var supermercato;
@@ -113,4 +149,4 @@ function randomPIVAScontrino() {
     return piva;
 }
 
-export {getIDfromDatalist, createHTMLScontrino, sendRequest};
+export {getIDfromDatalist, createHTMLScontrino, sendRequest, requestUsers};

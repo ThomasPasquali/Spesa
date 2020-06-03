@@ -85,6 +85,17 @@ app.get('/hash', function (req, res) {
   res.end();
 });
 
+//TODO DELETEME
+/***********TEST***********/
+app.get('/test', function (req, res) {
+  res.render('test', {
+    var1: 'var1',
+    var2: 2,
+    var3:[{a:1},2], // per acccedere a 1  --> var3[0].a
+    var4:{id:1, nome:'dsdd'} //per accedere --> var4.nome
+  });
+});
+
 /***********NUOVA LISTA***********/
 app.get('/newLista', function (req, res) {
   const supermercati = query.getSupermercati();
@@ -155,7 +166,7 @@ app.get(/\/spesa\/\d+/, function (req, res) {
 });
 
 /*************RUNTIME REQUESTS***********/
-app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID|supermercati|oggetti)/, function (req, res) {
+app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID|supermercati|oggetti|utentiDiUnGruppo)/, function (req, res) {
   const richiesta = req.originalUrl.split('/')[2];
   let risposta;
   switch (richiesta) {
@@ -165,6 +176,7 @@ app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID|sup
     case 'ricettaByID' : risposta = query.getOggettiRicetta(req.body.IDRicetta); break;
     case 'supermercati': risposta = query.getSupermercati(); break;
     case 'oggetti': risposta = query.getOggetti(); break;
+    case 'utentiDiUnGruppo' : risposta = query.getUsersByGruppo(req.body.IDGruppo); break;
     default: risposta = null; break;
   }
   risposta.then((data) => {
