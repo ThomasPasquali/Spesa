@@ -14,14 +14,14 @@ html
     body
         .main-container
             header
-                +navbar('none')
+                +navbar('Gestione oggetti')
             form#newOggetto.flex-vertical
                 div
                     label Supermercato: 
-                    select(name="supermercato")
+                    select(name="supermercato", required)
                 div
                     label Nome: 
-                    input(type="text", name="nome")
+                    input(type="text", name="nome", autofocus)
                 div
                     label Note: 
                     input(type="text", name="note")
