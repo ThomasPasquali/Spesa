@@ -1,4 +1,5 @@
 import {sendRequest} from './misc.js';
+import {getIDfromDatalist, replaceAll} from './misc.js';
 
 $(document).ready(async function() {
 
@@ -29,14 +30,19 @@ $(document).ready(async function() {
     });
 
     sendRequest('/get/supermercati', null).then((supermercati) => {
+        $('#newOggetto').append($("<datalist id='allSupermercati'>"));
         for (const supermercato of supermercati)
-            $('#newOggetto select').append($(`<option value="${supermercato.ID}">${supermercato.Descrizione}</option>`));
+            $('#allSupermercati').append($(`<option data-value="${supermercato.ID}">${supermercato.Descrizione}</option>`));
     });
 
     $('body').on('click', '#newOggetto input[type="submit"]', (e) => {
         e.preventDefault();
         let form = $('#newOggetto');
-        sendRequest('/insert/oggetto', form.serialize()).then((res) => {
+        let superm = form.serialize().split("=")[1].split("&")[0];
+        let parsed = replaceAll(superm,"%20"," ");
+        let id = getIDfromDatalist($('#allSupermercati'),parsed);
+        let s = form.serialize().replace(superm,id);
+        sendRequest('/insert/oggetto', s).then((res) => {
             table.addData(res[0]);
             form.trigger('reset');
         });

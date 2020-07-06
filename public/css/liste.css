@@ -1,66 +1,25 @@
+@import "../lib/css/settings.css";
 /*
     @autor: davideberga0
     @content: Tutto il css che riguarda la pagina di una nuova lista
 */ 
 
 .float{
-    position:fixed;
-    width:60px;
-    height:60px;
-    bottom:40px;
-    right:40px;
-    background-color:#005CB9;
-    border-radius:50px;
-    text-align:center;
-    box-shadow: 2px 2px 3px #999;
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 2px 2px 3px #9999;
+    border-radius: 50%;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
   }
 
   .my-float{
     margin-top:22px;
     color: #f5aa3b;
-  }
-  .utentiAssociati{
-    margin: 8px;
-    padding: 0px;
-  }
-  
-  form.lista{
-    padding: 0;
-    width: 100%;
-  }
-  
-  div.utenti{
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    flex-wrap: wrap;
-  }
-  
-  div.utente{
-    width: 10ch;
-    flex-basis: 170px;
-    display: inline-flex;
-    padding: 5px;
-    margin: 5px;
-    background-color: #5e5e5e;
-    border-radius: 20px;
-    border-width: 0px;
-  }
-  
-  label.utente{
-    background-color: rgba(0,0,0,0.0);
-    display: inline;
-    padding-left: 30px;
-    border-width: 0px;
-    text-align: left;
-  }
-
-  label.utenti{
-    background-color: rgba(0,0,0,0.0);
-    display: inline;
-    padding-left: 2px;
-    border-width: 0px;
-    text-align: left;
   }
 
   input.invalid{
@@ -69,90 +28,22 @@
 
   .blocked{
     pointer-events: none; 
-    opacity: 0.4;
+    opacity: 0.7;
   }
 
   .actived{
     pointer-events: all; 
     opacity: 1;
   }
-  
-  button.utente{
-    position: absolute;
-    background-color: #c12e2a;
-    width: 24px;
-    height: 24px;
-    margin-bottom: 4px;
-    text-align: center;
-    border-radius: 100%;
-  }
-  
-  i.rimuovi{
-    background-color: rgba(0,0,0,0.0);
-    color: whitesmoke;
-  }
-  
-  button.aggiungi{
-    background-color: #005CB9;
-    color: #f5aa3b;
-    padding: 5px;
-    display: inline;
-    margin: 10px;
-    text-align: center;
-    line-height: 50%;
-    border-radius: 20px;
-  }
-  
-  i.aggiungi{
-    background-color: rgba(0,0,0,0.0);
-    margin-left: 8px;
-    color: #f5aa3b;
-  }
 
-  span.utente{
-    display: inline;
-    margin: 5px;
-  }
-
-  input.utente{
-    margin: 8px; 
-    display: inline;
-  }
-  
-  div.utente:hover{
-    background-color: #3c3c3c;
-  }
-  
   div.content-collapsible-utenti{
     display: none;
-    padding: 10px;
-    background-color: #5e5e5e;
-    width: 100%;
   }
   
   div.content-collapsible-ricette{
     display: none;
-    padding: 10px;
-    background-color: #5e5e5e;
-    width: 100%;
   }
   
-  div.alimento{
-    padding: 5px;
-    margin: 0px 5px 0px 5px;
-    border: 0px solid #3c3c3c;
-    border-bottom-width: 2px;
-  }
-  
-  button.alimento{
-    margin-left: 10px;
-    background-color: #c12e2a;
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    border-radius: 100%;
-  }
-
   .red-triangle{
     text-decoration-color: #c12e2a;
     color: #c12e2a;
@@ -162,10 +53,7 @@
     display: none;
   }
   
-  input.alimento{
-    border-width: 0px;
-    margin: 5px;
-  }
+  /* Css scontrino */
 
   .alignleft {
     text-align: left;

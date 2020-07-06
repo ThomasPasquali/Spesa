@@ -18,6 +18,10 @@ function getIDfromDatalist(datalist, search) {
     }).data('value');
 }
 
+function replaceAll(str, cerca, sostituisci) {
+    return str.split(cerca).join(sostituisci);
+}
+
 $(document).ready(() => {
 
     $('body').on('click', '.dropdown-control', function() {
@@ -89,7 +93,9 @@ function createHTMLScontrino(nomeGruppo, supers, idSuper, nomeLista, listaSpesa,
     html += rigaVuota();
     html += "<row class='scontrino'><p class='alignleft scontrinoLarge'>DESCRIZIONE</p><p class='alignright scontrinoLarge'>Prezzo(€)</p></div></div></row>";
     var sommaCalcolata = 0;
+    
     $.each(listaSpesa.getOggetti(), function (id, oggetto) {
+        oggetto.prezzo = Number.isNaN(oggetto.prezzo) ? 0 : oggetto.prezzo;
         var prezzoTot = oggetto.qta * oggetto.prezzo;
         prezzoTot = Math.round(prezzoTot * 100) / 100;
         sommaCalcolata += prezzoTot;
@@ -149,4 +155,4 @@ function randomPIVAScontrino() {
     return piva;
 }
 
-export {getIDfromDatalist, createHTMLScontrino, sendRequest, requestUsers};
+export {getIDfromDatalist, createHTMLScontrino, sendRequest, requestUsers, replaceAll};

@@ -102,7 +102,7 @@ function is_numeric(n) {
             var counter = 0;
             $.each(data, function(id, oggetto) {
                 counter++;
-                $('#divIngredienti').append( '<span class="utente"><input class="alimento checkIngrediente" type="checkbox" checked readonly="readonly" name="utente_' + counter + '" value="' + oggetto.ID + '" /><label class="utente">' + oggetto.Nome + '</label></span>' );
+                $('#divIngredienti').append( '<span class="utente"><input class="alimento checkIngrediente" type="checkbox" checked readonly="readonly" name="utente_' + counter + '" value="' + oggetto.ID + '" /><label class="utente n1">' + oggetto.Nome + '</label></span>' );
             });
           }
     });

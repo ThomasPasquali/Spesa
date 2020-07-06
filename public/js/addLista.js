@@ -51,7 +51,7 @@ $(document).ready(function () {
                     var nome = $(this).attr('id');
                     var id = $(this).attr('value');
                     var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente" value="' + id + 
-                                    '" /><label class="utente">' + nome + '</label><button type="button" class="utente rmUtenteAssociato"><i class="fa fa-remove rimuovi"></i></button></div>';
+                                    '" /><label class="utente n1">' + nome + '</label><button type="button" class="utente rmUtenteAssociato piccolo"><i class="fa fa-remove rimuovi"></i></button></div>';
                     e.preventDefault();
                     savedSelectedGroup = id;
                     savedSelectedGroupName = nome;
@@ -112,6 +112,7 @@ $(document).ready(function () {
                     if(isPrimaSelezione || window.confirm("Confermando cambierai il tipo di supermercato ma eliminerai tutti gli elementi della lista appena inseriti, continuare?")){
                             // è la prima selezione oppure l'utente ha confermato il cambiamento di supermercato
                             $(this).removeClass().addClass('alimento');
+                            $(this).addClass('n2');
                             $(divAlimenti).removeClass().addClass('alimento actived');
                             recreateDataListAlimenti(listaAlimenti, { IDSupermercato : getDatalistId($(datalistSupermercati), $(this).val())})
                             savedSelectedSuperMer = getDatalistId($(datalistSupermercati), $(this).val());
@@ -140,11 +141,10 @@ $(document).ready(function () {
 
         //Change quantità
         $('body').on('change', '.alimento.qta',function (e) {
-            console.log('sjdajdjk');
             var val = $(this).parent('div.alimento').find('.alimento.inputWithList').val();
             var id = getDatalistId($(datalistAlimenti), val);
             if(is_int($(this).val())){
-                $(this).removeClass().addClass('alimento qta valid');
+                $(this).removeClass().addClass('alimento qta valid n2');
                 listaSpesa.updateQta(id, $(this).val());
             }else{
                 listaSpesa.updateQta(id, 0);
@@ -159,9 +159,9 @@ $(document).ready(function () {
         //Aggiunta riga vuota per un nuovo alimento
         $(btnAddAlimento).click(function (e) {
             var counter = 0;
-            var html = '<div class="alimento"><input style="width: 200px;" class="alimento inputWithList" name="alimento_' + 
-                            counter + '" list="allAlimenti"><input class="alimento qta blocked" style="width: 60px;" list="listaQuantita" name="qtaAlimenti_' + counter + 
-                                '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
+            var html = '<div class="alimento"><input class="alimento inputWithList n2" name="alimento_' + 
+                            counter + '" list="allAlimenti"><input class="alimento qta n2 blocked" list="listaQuantita" name="qtaAlimenti_' + counter + 
+                                '"><button class="alimento rmAlimento piccolo" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
             e.preventDefault();
             $('div.lista.master').append(html);
             $('div.alimento:last-child').hide().fadeIn('slow');
@@ -197,7 +197,7 @@ $(document).ready(function () {
         });
 
         //Apre uno scontrino, VEROOO!!
-        $('#buttonSubmit').click(function (e) {
+        $('#confirmButton').click(function (e) {
             e.preventDefault();
             $.confirm({
                 title: '',

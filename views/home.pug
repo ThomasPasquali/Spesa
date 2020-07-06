@@ -1,4 +1,4 @@
-include misc
+include ../lib/lib
 doctype mobile
 html
     head
@@ -7,23 +7,31 @@ html
         +jquery
         +bootstrap
         +fontawesome
-        link(rel='stylesheet',type='text/css',href='/css/misc.css')
+        +cssLib
+        link(rel='stylesheet', href='../css/main.css')
         script(src='/js/misc.js' type='module')
     body
-        +navbar('none')
-        .flex-vertical
-            .flex.dropdown-control(data-target='#liste')
-                i.fas.fa-caret-down
-                h2 Liste attive
-            #liste.flex-vertical
-                each lista in listeUtente
-                    a(href='/spesa/' + lista.ID)=lista.Nome
-                    
-            .flex.dropdown-control(data-target='#operazioni')
-                i.fas.fa-caret-down
-                h2 Operazioni
-            #operazioni.flex-vertical
-                a(href="/newLista") Crea una nuova lista
-                if user.isAdmin
-                    a(href="/gestioneOggetti") Gestisci oggetti e supermercacti
-                    a(href="/gestioneUtenze") Gestisci uetnze
+        +navbar('Buonasera Astrobolide','none')
+        .centra
+            .sezione.attive
+                .flex.dropdown-control(data-target='#liste')
+                    h2 Liste attive
+                #liste
+                    ul
+                        each lista in listeUtente
+                            li
+                                a(href='/spesa/' + lista.ID)=lista.Nome
+            .sezione.operazioni   
+                .flex.dropdown-control(data-target='#operazioni')
+                    h2 Operazioni
+                #operazioni
+                    .sezione.operazioni.op
+                        a(href="/newLista") Crea una nuova lista
+                        i.fa.fa-arrow-right
+                    if user.isAdmin
+                        .sezione.operazioni.op
+                            a(href="/gestioneOggetti") Gest. oggetti e supermercati
+                            i.fa.fa-arrow-right
+                        .sezione.operazioni.op
+                            a(href="/gestioneUtenze") Gest. utenze
+                            i.fa.fa-arrow-right

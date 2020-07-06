@@ -51,7 +51,7 @@ export default class ListaAddLista extends Lista{
             $(this.container).empty();
             var counter = 0;
             $.each(this.getOggetti(), function (id , alimento) { 
-                var html = '<div class="alimento"><input style="width: 200px;" class="alimento inputWithList blocked" value="'+ alimento.nome +'" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento qta" style="width: 60px;" value="'+ alimento.qta +'" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
+                var html = '<div class="alimento"><input class="alimento inputWithList n2 blocked" value="'+ alimento.nome +'" name="alimento_' + counter + '" list="allAlimenti"><input class="alimento qta n2" value="'+ alimento.qta +'" name="qtaAlimenti_' + counter + '"><button class="alimento rmAlimento piccolo" type="button"><i class="fa fa-remove rimuovi"></i></button></div>';
                 $(c).append(html);
                 counter++;
             });

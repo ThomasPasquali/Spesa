@@ -1,11 +1,18 @@
 @import "animazioni.css";
+@import "misc.css";
+@import "settings.css";
+
+/*
+    Library about topbar and forms. 
+*/
 
 body{
+    
     margin: 0;
 
     /*Topnav features*/
-    --backColor-topNav : #0c4ea5;
-    --textColor-topNav : #000000; 
+    --backColor-topNav : var(--primary-color);
+    --textColor-topNav : var(--text-color); 
     --height-topNav : 10%;
     --width-topNav : 100%;
     --padding-topNav : 0.2rem;
@@ -13,33 +20,34 @@ body{
     
     /*Topnav elements (a) features*/
     --backColor-elems : trasparent;
-    --textColor-elems : #000000;
-    --familyFont-elems : Verdana;
+    --textColor-elems : var(--text-color);
+    --familyFont-elems : var(--text-font);
     --fontSize-elems : 1rem;
     --text-align-elems : center;
     --text-decoration-elems: none;
-    --padding-elems: 0.7rem 0.8rem;
+    --padding-elems: 0.1rem 0.1rem;
 
     /*Saluto features*/
     --backColor-saluto : trasparent;
-    --textColor-saluto : #000000;
-    --familyFont-saluto : Cursive;
-    --fontSize-saluto : 1.2rem;
-    --text-align-saluto : center;
+    --textColor-saluto : var(--text-color);
+    --familyFont-saluto : var(--text-font);
+    --fontSize-saluto : 1.5rem;
+    --text-align-saluto : left;
     --text-decoration-saluto : none;
     --padding-saluto : 0.7rem 0.8rem;
 
     /* Logo features*/
-    --height-logo : 2.25rem;
-    --width-logo : 2.05rem;
+    --height-logo : 3rem;
+    --width-logo : 2.60rem;
     --padding-logo : 0.2rem 0.2rem;
 
     /* Logout features */
-    --backColor-logout : #ffb917;
-    --padding-logout: 0.5rem;
+    --backColor-logout : var(--secondary-color);
+    --padding-logout: 0.2rem;
+    --margin-logout: 0.8rem;
 }
 
-/*Barra di navigazione, generalità */
+/**************** Barra di navigazione *********************/
 
 .topnav{
     height : var(--height-topNav);
@@ -50,33 +58,8 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    position: relative;
-}
-  
-/* Componenti della barra di navigazione  */
-.topnavElemSx{
-    color: var(--textColor-elems);
-    text-align: var(--text-align-elems);
-    text-decoration: var(--text-decoration-elems);
-    font-size: var(--fontSize-elems);
-    font-family : var(--familyFont-elems);
-    padding : var(--padding-elems);
-    margin : auto;
-}
-
-/* Componenti della barra di navigazione che stanno più a destra */
-
-.topnavElemDx{
-    color: var(--textColor-elems);
-    text-align: var(--text-align-elems);
-    text-decoration: var(--text-decoration-elems);
-    font-size: var(--fontSize-elems);
-    font-family : var(--familyFont-elems);
-    padding : var(--padding-elems);
-    align-self: center;
-    flex-basis: unset;
+    justify-content: space-evenly;
+    
 }
 
 /* Saluto barra di navigazione */
@@ -88,7 +71,8 @@ body{
     font-size: var(--fontSize-saluto);
     font-family : var(--familyFont-saluto);
     padding : var(--padding-saluto);
-    order : 1;
+    order : 2;
+    flex-grow: 2;
 }
 
 /* Logo barra di navigazione*/
@@ -97,7 +81,7 @@ body{
     height: var(--height-logo);
     width: var(--width-logo);
     padding: var(--padding-logo);
-    order: 0;
+    flex-grow: 1;
     /* animation-name: scampa;
     animation-duration: 3s;
     animation-direction: normal;
@@ -113,11 +97,18 @@ body{
     color : var(--backColor-topNav);
     text-decoration: none;
     padding : var(--padding-logout);
-    border-radius: 0.2rem;
-    order: 2;
+    border-radius: 0.3rem;
+    flex-basis: min-content;
+    margin: var(--margin-logout);
+    order: 4;
 }
 
 /* Barra di ricerca (non modificare)*/
+
+.barraRicerca{
+    order: 3;
+    margin-right: 0.5rem;
+}
 
 .search-box {
     border: solid 0.3rem black;
@@ -189,3 +180,174 @@ body{
     right: -7rem;
     transition: top 300ms ease-out, right 300ms ease-out, opacity 300ms ease-out;
 }
+
+
+/********** A General Form *************/
+
+.formBeauty{
+    margin: 5%;
+    background-color: var(--light-background-color);
+    color: var(--textColor-topNav);
+}
+
+.formBeauty form{
+    padding: 5%;
+}
+
+.formBeauty form h4{
+    font-size: 1.4rem;
+    font-family: var(--text-font);
+    color: var(--textColor-topNav);
+    margin-top: 0.8rem;
+    margin-bottom: 0.4rem;
+    font-weight: normal; 
+}
+
+.formBeauty form input.n{
+    border-color: transparent;
+    background-color: var(--light-background-color);
+    border-bottom-color: var(--backColor-topNav);
+    border-bottom-width: 0.2rem;
+    color: var(--backColor-topNav);
+    font-family: var(--text-font);
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding: 0rem;
+    width: 100%;
+    text-decoration-color: var(--backColor-topNav);
+}
+
+.formBeauty form input.n::placeholder{
+    color: var(--backColor-topNav);
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+.formBeauty button{
+    color: var(--backColor-logout);
+    background-color: var(--backColor-topNav);
+    width: 15.0rem;
+    margin: 0.4rem;
+    font-family: var(--text-font);
+    font-size: 1.0rem;
+    font-weight: bold;
+    border-color: transparent;
+    border-radius: 0.3rem;
+    height: 2.0rem;
+}
+
+.formBeauty input.btn{
+    color: var(--backColor-logout);
+    background-color: var(--backColor-topNav);
+    width: 15.0rem;
+    margin: 0.4rem;
+    font-family: var(--text-font);
+    font-size: 1.0rem;
+    font-weight: bold;
+    border-color: transparent;
+    border-radius: 0.3rem;
+    height: 2.0rem;
+}
+
+.formBeauty button.piccolo{
+    color: var(--backColor-logout);
+    background-color: var(--backColor-topNav);
+    width: 1.8rem;
+    margin: 0rem;
+    margin-left: 0.5rem;
+    border-color: transparent;
+    border-radius: 0.7rem;
+    text-align: center;
+    height: 1.8rem;
+}
+
+.formBeauty button.piccolo i{
+    margin-left: 0rem;
+
+}
+
+.formBeauty button i{
+    margin-left: 1.5rem;
+}
+
+.formBeauty h5{
+    margin-left: 1.0rem;
+    font-family: var(--text-font);
+    font-weight: normal;
+    font-size: 1.2rem;
+}
+
+.formBeauty h6{
+    font-family: var(--text-font);
+    font-weight: normal;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+}
+
+.formBeauty input.n1{
+    margin-left: 1.3rem;
+    font-family: var(--text-font);
+    font-weight: normal;
+    font-size: 1.0rem;
+}
+
+.formBeauty label.n1{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-family: var(--text-font);
+    font-weight: normal;
+    font-size: 1.0rem;
+}
+
+.formBeauty input.n2{
+    border-color: transparent;
+    background-color: var(--light-background-color);
+    border-bottom-color: var(--backColor-topNav);
+    border-bottom-width: 0.2rem;
+    color: var(--backColor-topNav);
+    font-family: var(--text-font);
+    font-size: 1.2rem;
+    font-weight: 400;
+    padding: 0rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+    width: 40%;
+    text-align: center;
+    text-decoration-color: var(--backColor-topNav);
+}
+
+.formBeauty input.n3{
+    border-color: transparent;
+    background-color: var(--light-background-color);
+    border-bottom-color: var(--backColor-topNav);
+    border-bottom-width: 0.2rem;
+    color: var(--backColor-topNav);
+    font-family: var(--text-font);
+    font-size: 1.2rem;
+    font-weight: 400;
+    padding: 0rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+    width: 80%;
+    text-align: center;
+    text-decoration-color: var(--backColor-topNav);
+}
+
+/******* Animazioni Pulsanti *********/
+
+button:active{
+    animation-duration: 5000ms;
+    animation-fill-mode: forwards;
+    animation-name: pulse;
+}
+
+div.sezione.operazioni.op:active{
+    animation-duration: 5000ms;
+    animation-fill-mode: forwards;
+    animation-name: pulse;
+}
+
+
+

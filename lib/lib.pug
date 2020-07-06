@@ -38,23 +38,22 @@ mixin cssLib
         
 mixin navbar(saluto='Salve sconosciuto',displaySearch='block')
     div.topnav
-        .topnavElemSx
+        .logo
             a(href='/home')
                 img.logo(src='/images/eurospin-logo.png')
-        .topnavElemSx
+        .saluto
             a.saluto=saluto 
-        .topnavElemDx(style='display:'+displaySearch)
+        .barraRicerca(style='display:'+displaySearch)
             .search-box
                 input(type="text", placeholder="Cerca")
                 span
-        .topnavElemDx
-            a.logout(href='/')
-                i.fa.fa-check
+        .logout
+            a.logout(href='/') Logout
                 
 
 
-mixin confirmButton(i='fa-check', display='block')
-    a#confirmButton.float(style='display:'+display+'; position: absolute; bottom: 15px; right: 15px;')
+mixin confirmButton(i='fa-check')
+    a#confirmButton.float
         i(class='fa my-float '+i)
 
 mixin iconButton(id, i)

@@ -9,25 +9,24 @@ html
         +jqueryConfirm
         +tabulator
         +libCSS
-        link(rel='stylesheet',type='text/css',href='/css/misc.css')
         script(src='/js/gestioneOggetti.js' type="module")
     body
         .main-container
             header
-                +navbar('none')
-            form#newOggetto.flex-vertical
-                div
-                    label Supermercato: 
-                    select(name="supermercato")
-                div
-                    label Nome: 
-                    input(type="text", name="nome")
-                div
-                    label Note: 
-                    input(type="text", name="note")
-                div
-                    label Prezzo: 
-                    input(type="number", name="prezzo")
-                input(type="submit", value="Aggiungi oggetto")
-
+                +navbar('Gest. oggetti e supermercati','none')
+            .formBeauty
+                form#newOggetto
+                    div
+                        h4 Supermercato: 
+                        input.n3(type="select" list="allSupermercati" name="supermercato")
+                    div
+                        label.n1 Nome: 
+                        input.n2(type="text", name="nome")
+                    div
+                        label.n1 Note: 
+                        input.n2(type="text", name="note")
+                    div
+                        label.n1 Prezzo: 
+                        input.n2(type="number", name="prezzo")
+                    input.btn(type="submit", value="Aggiungi oggetto")
             #table

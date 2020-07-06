@@ -1,4 +1,4 @@
-include misc
+include ../lib/lib
 doctype mobile
 html
     head
@@ -7,74 +7,71 @@ html
         +bootstrap
         +fontawesome
         +jqueryConfirm
-        link(rel='stylesheet',type='text/css',href='/css/liste.css')
-        link(rel='stylesheet',type='text/css',href='/css/main.css')
+        link(rel="stylesheet", href="/css/liste.css")
+        +cssLib
         script(type='module' src='/js/addLista.js')
     body
-        +navbar('none')
-        h3(style='margin: 8px;') Crea una nuova lista
+        +navbar('Nuova lista','none')
         script.
             supermercati = !{JSON.stringify(allSupermercati)};
-        div.utentiAssociati
+        div.utentiAssociati.formBeauty
             form.utenti(id='formUtentiAssociati' method='GET')
-                h5 Dagli un nome:
-                input.n(style='margin: 14px' id='nomeLista' name='nomeLista' placeholder='Nuovo')
-                h5 Gruppi di utenti con il permesso di modificarla:
+                input.n(id='nomeLista' name='nomeLista' placeholder='Nome della lista')
+                h4 Voglio condividerla con:
                 div.utenti.master
                 div
                     button.aggiungi(id='addUtenteAssociato')
                         h7 Aggiungi
                         i.fa.fa-plus.aggiungi
                     div.content-collapsible-utenti(id='selectUtenti')
-                        h5(style='margin: 4px;') L'ultimo che ho usato
+                        h5 L'ultimo che ho usato
                         div.utenti.preferiti
                             span.utente
-                                input.utente(type='radio' class='radioUtenti' value=prefGroup.ID id=prefGroup.Nome  name='groupLinked')
-                                label.utenti(for='allPreferiti')=prefGroup.Nome
-                        h5(style='margin: 4px;') I miei gruppi
+                                input.utente.n1(type='radio' class='radioUtenti' value=prefGroup.ID id=prefGroup.Nome  name='groupLinked')
+                                label.utenti.n1(for='allPreferiti')=prefGroup.Nome
+                        h5 I miei gruppi
                         div.utenti
                             each gruppo in allGroups
                                 span.utente
-                                    input.utente(type='radio' class='radioUtenti' value=gruppo.ID name='groupLinked' id=gruppo.Nome)
-                                    label.utenti(for='allPreferiti')=gruppo.Nome
+                                    input.utente.n1(type='radio' class='radioUtenti' value=gruppo.ID name='groupLinked' id=gruppo.Nome)
+                                    label.utenti.n1(for='allPreferiti')=gruppo.Nome
                         button.aggiungi.right(id='confirmUtenti') OK
 
-                    h5 In quale supermercato ti recherai?
-                    input(style="width: 200px;" id='selectS' class="alimento" name="supermercato" list="allSupermercati")
+                    h4 Supermercato:
+                    input.n3(id='selectS' class="alimento" name="supermercato" list="allSupermercati")
 
-                    h5 Oggetti della lista
+                    h4 Oggetti della lista
                     div.alimenti.blocked(id='divAlimenti')
-                        table
+                        table(style='width: 100%;')
                             tr
-                                td(style='padding-left: 40px;')
-                                    h7 Nome prodotto
-                                td(style='padding-left: 84px;')
-                                    h7 Qta
+                                td(style='width: 50%;')
+                                    h6 Nome prodotto
+                                td(style='width: 50%;')
+                                    h6 Qta
                         div.lista.master
                         button.aggiungi(id='addAlimento')
-                            h7(style='color: #f5aa3b') Aggiungi oggetto
+                            h7 Aggiungi oggetto
                             i.fa.fa-plus.aggiungi
                         br
                         button.aggiungi(id='addRicetta')
-                            h7(style='color: #f5aa3b') Aggiungi ricetta
+                            h7 Aggiungi ricetta
                             i.fa.fa-plus.aggiungi
                         div.content-collapsible-ricette(id='divRicette')
-                            h5(style='margin: 4px;') Seleziona una ricetta e scegli gli elementi da aggiungere
-                            input(style="width: 200px;" id='selectR' class="alimento" list="allRicette")
+                            h4 Seleziona una ricetta e scegli gli elementi da aggiungere
+                            input.n3( id='selectR' class="alimento" list="allRicette")
                             div(id='noUtenze')
                                 i.fa.fa-exclamation-triangle.red-triangle 
-                                h7.red-triangle(style='margin-left: 5px;') Selezionare un gruppo di utenze
+                                label.red-triangle.n1 Selezionare un gruppo di utenze
                             div.ingredienti(id='divIngredienti')
                             button.aggiungi.right(id='confirmRicette') OK
-                h5 Richiesta prezzo effettivo oggetti
+                h4 Richiesta prezzo effettivo oggetti
                 input(type="checkbox" name="richiedi_prezzi")
 
-            datalist(id='allSupermercati')
+            datalist.n2(id='allSupermercati')
                 each supermercato in allSupermercati
                     option(data-value=supermercato.ID)=supermercato.Nome
 
             datalist(id='allAlimenti')
             
             datalist(id='allRicette')
-        div(id='buttonSubmit')
-            +confirmButton
+        +confirmButton

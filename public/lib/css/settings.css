@@ -1,0 +1,43 @@
+/*
+    Set up colors and fonts of all the application.
+*/
+
+/* Font import */
+
+@font-face {
+    font-family: lato;
+    src: url(../fonts/Lato-Regular.ttf);
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: lato;
+    src: url(../fonts/Lato-Bold.ttf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: lato;
+    src: url(../fonts/Lato-Black.ttf);
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: lato;
+    src: url(../fonts/Lato-Italic.ttf);
+    font-weight: 400;
+}
+
+:root{
+    /* What a color */
+
+    --primary-color : #0c4ea5;
+    --secondary-color : #ffb917;
+    --text-color : #000000;
+    --light-background-color : #84abff;
+
+    /* What a font */
+
+    --text-font : lato;
+      
+}

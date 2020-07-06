@@ -17,6 +17,7 @@ const app = express();
 
 app.use(favicon(path.join(__dirname,'public','images','favicon.ico')));
 app.use(body_parser.json());
+
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(session({
   secret: 'secret',
