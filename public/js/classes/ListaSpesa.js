@@ -90,6 +90,8 @@ export default class ListaSpesa extends Lista{
                     IDOggetto:o.id,
                     IDLista:lista.getID(),
                     prezoAcquisto:prezzo
+                }).then((res) => {
+                    if(res && res.code) console.log(res);
                 }).catch((err) => { alert('EVVOVE'); console.log(err); });
             }).catch(() => { lista.refreshOggetto(id, o) });
         else 

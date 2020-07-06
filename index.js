@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-const PORT = 3000;
+const PORT = global.iniFile.app.port;
 const SALT_ROUNDS = 3;
 
 /**********CONTROLLO LOGIN (su tutte le pagine tranne login)*********/
@@ -261,6 +261,25 @@ app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista)/, function (req, res) {
   }
   risposta.then((data) => {
     res.write(JSON.stringify(data));
+    res.end();
+  }).catch((err) => {
+    res.write(JSON.stringify(err));
+    res.end();
+  });
+  
+});
+
+app.post(/\/delete\/(oggetto)/, function (req, res) {
+  const richiesta = req.originalUrl.split('/')[2];
+  let risposta;
+  switch (richiesta) {
+    case 'oggetto':
+      risposta = query.deleteOggetto(req.body.ID);
+      break;
+    default: risposta = null; break;
+  }
+  risposta.then((data) => {
+    res.write(JSON.stringify(null));
     res.end();
   }).catch((err) => {
     res.write(JSON.stringify(err));

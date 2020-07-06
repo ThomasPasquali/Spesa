@@ -62,6 +62,15 @@ $(document).ready(function() {
     });
 
     window.listaSpesa.refreshLista();
+
+    function checkInternetConnection(){
+        if (navigator.onLine) $('#connectionWarning').addClass("hidden");
+        else $('#connectionWarning').removeClass("hidden");
+        setTimeout(function() {
+            checkInternetConnection();
+        }, 5000);
+    }
+    checkInternetConnection();
     
 });
 

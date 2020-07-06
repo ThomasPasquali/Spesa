@@ -15,7 +15,7 @@ SEE http://tabulator.info/docs/4.0/style
 
 /*Main container*/
 .tabulator {
-    width: 70vh;
+    /*width: 70vh;*/
     margin-left: auto;
     margin-right: auto;
     border: solid 2px black;
