@@ -45,6 +45,7 @@ $(document).ready(function () {
         // Quando viene premuto il pulsante OK all'interno del div collassabile
         // tutti gli utenti selezionati vengono aggiunti al form e vengono cancellati i precedenti
         $('#confirmUtenti').click(function (e) {
+            e.preventDefault();
             $(contenitore).empty();
             $(radioUtenti).each(function () {
                 if ($(this).is(':checked')) {
@@ -52,7 +53,6 @@ $(document).ready(function () {
                     var id = $(this).attr('value');
                     var html = '<div class="utente"><input class="utente" type="hidden" readonly="readonly" name="utente" value="' + id + 
                                     '" /><label class="utente n1">' + nome + '</label><button type="button" class="utente rmUtenteAssociato piccolo"><i class="fa fa-remove rimuovi"></i></button></div>';
-                    e.preventDefault();
                     savedSelectedGroup = id;
                     savedSelectedGroupName = nome;
                     $(contenitore).append(html);

@@ -1,4 +1,4 @@
-include misc
+include ../lib/lib
 doctype mobile
 html
     head
@@ -7,10 +7,12 @@ html
         +jquery
         +bootstrap
         +fontawesome
+        +jqueryConfirm
+        +cssLib
         link(rel='stylesheet',type='text/css',href='/css/gruppi.css')
         script(src='/js/gestioneUtenti.js' type='module')
     body
-        +navbar('none')
+        +navbar('Gestione utenze','none')
         div.cards
             each g in groups
                 div.groupCard.container(id='' + g.ID)
@@ -19,4 +21,6 @@ html
                         div.button.alignright(id='button_'+g.ID)
                             +caricamento
                     div.utenti(style='display: none;', id='utenti_'+g.ID)
+                    button.utente.addUser(id=''+g.ID)
+                        i.fa.fa-plus.rimuovi
         

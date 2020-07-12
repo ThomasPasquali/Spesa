@@ -1,8 +1,13 @@
 
-/*************** Main Page *****************/
+/*************** Main Page and General appareance *****************/
 
 .centra{
   text-align: left;
+  margin: 5%;
+}
+
+.centra2{
+  text-align: center;
   margin: 5%;
 }
 
@@ -10,12 +15,27 @@
   background-color: var(--light-background-color);
   margin-top: 1.6rem;
   padding: 0.3rem;
+  text-align: left;
 }
 
 .sezione h2{
   font-family: var(--text-font);
   padding: 0.3rem;
-  font-size: 2.3rem;
+  font-size: 2.1rem;
+}
+
+.sezioneSenzaSfondo h5{
+  font-family: var(--text-font);
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.sezioneSenzaSfondo h6{
+  font-family: var(--text-font);
+  background-color: transparent;
+  font-weight: 400;
+  font-size: 1.2rem;
 }
 
 .sezione.attive a{
@@ -25,6 +45,15 @@
   padding: 0.3rem;
   font-family: var(--text-font);
   font-size: 1.5rem;
+}
+
+.sezione.attive label{
+  text-decoration: none;
+  color: var(--primary-color);
+  font-style: italic;
+  padding: 0.3rem;
+  font-family: var(--text-font);
+  font-size: 1.1rem;
 }
 
 .sezione.operazioni.op{

@@ -1,139 +1,166 @@
+@import '../lib/css/settings.css';
+
 /*
     @author : davideberga0
     @content : Css della pagina 'Gestione Utenze'
 */
-div.cards{
+
+div.cards {
     display: flex;
     flex-direction: column;
     margin: 2rem;
 }
 
 div.groupCard {
-    background-color: coral;
+    background-color: var(--light-background-color);
     flex-basis: 1rem;
     display: flex;
-    flex-direction:  column;
+    flex-direction: column;
     border-radius: 1rem;
     margin: 0.5rem;
 }
 
-div.groupCard.titleButton{
+div.groupCard.titleButton {
     display: flex;
-    flex-direction:  row;
+    flex-direction: row;
 }
 
-div.title{
-  align-self: flex-start;
-  flex-basis: 10rem;
+.title {
+    align-self: flex-start;
+    flex-basis: 10rem;
+    font-family: var(--text-font);
+    font-weight: bold;
 }
 
-div.button button{
-  align-self: flex-end;
-  background-color: transparent;
-  border-width: 0ch;
+div.button button {
+    align-self: flex-end;
+    background-color: transparent;
+    border-width: 0ch;
 }
 
-div.utenti{
-  display: block;
-  margin: 0.5rem;
+div.utenti {
+    display: block;
+    margin: 0.5rem;
 }
 
-div.utente{
-  width: 50%;
-  flex-basis: 20%;
-  display: flex;
-  margin: 0.2rem;
-  background-color: #5e5e5e;
-  border-radius: 20px;
-  border-width: 0px;
+div.utente {
+    width: 50%;
+    flex-basis: 20%;
+    display: flex;
+    margin: 0.2rem;
+    border-radius: 20px;
+    border-width: 0px;
 }
 
-label.utente{
-  background-color: rgba(0,0,0,0.0);
-  display: inline-block;
-  width: 100%;
-  padding-left: 1rem;
-  padding-top: 0.5rem;
-  border-width: 0px;
-  text-align: left;
+.utentecheck label {
+    font-family: var(--text-font);
+    font-weight: 400;
+    margin-left: 1.4rem;
 }
 
-
-input.invalid{
-  color: #c12e2a;
+h4 {
+    font-family: var(--text-font);
+    font-weight: bold;
+    color: var(--primary-color);
 }
 
-.blocked{
-  pointer-events: none; 
-  opacity: 0.4;
+label.utente {
+    background-color: rgba(0, 0, 0, 0.0);
+    display: inline-block;
+    width: 100%;
+    font-family: var(--text-font);
+    font-weight: 400;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    border-width: 0px;
+    text-align: left;
 }
 
-.actived{
-  pointer-events: all; 
-  opacity: 1;
+label.input {
+    background-color: rgba(0, 0, 0, 0.0);
+    display: inline-block;
+    width: 100%;
+    font-family: var(--text-font);
+    font-weight: 400;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    border-width: 0px;
+    text-align: left;
 }
 
-button.utente{
-  position: relative;
-  background-color: #c12e2a;
-  width: 24px;
-  height: 24px;
-  border-width: 0ch;
-  align-self: flex-end;
-  margin-left: 0.5rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  border-radius: 100%;
+input.invalid {
+    color: #c12e2a;
 }
 
-i.rimuovi{
-  background-color: rgba(0,0,0,0.0);
-  color: whitesmoke;
+.blocked {
+    pointer-events: none;
+    opacity: 0.4;
 }
 
-button.aggiungi{
-  background-color: #005CB9;
-  color: #f5aa3b;
-  padding: 5px;
-  display: inline;
-  margin: 10px;
-  text-align: center;
-  line-height: 50%;
-  border-radius: 20px;
+.actived {
+    pointer-events: all;
+    opacity: 1;
+}
+
+button.utente {
+    position: relative;
+    color: var(--backColor-logout);
+    background-color: var(--backColor-topNav);
+    width: 24px;
+    height: 24px;
+    border-width: 0ch;
+    align-self: flex-end;
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    border-radius: 20%;
+}
+
+i.rimuovi {
+    color: var(--secondary-color);
+}
+
+button.aggiungi {
+    background-color: #005CB9;
+    color: #f5aa3b;
+    padding: 5px;
+    display: inline;
+    margin: 10px;
+    text-align: center;
+    line-height: 50%;
+    border-radius: 20px;
 }
 
 .alignleft {
-  text-align: left;
-  align-self: flex-start;
-  width: 50%;
-  display: inline-block;
-  -webkit-font-smoothing : none;
+    text-align: left;
+    align-self: flex-start;
+    width: 50%;
+    color: var(--primary-color);
+    display: inline-block;
 }
 
 .alignright {
-  text-align: right;
-  text-decoration: black;
-  display: inline-block;
-  width: 50%;
-  -webkit-font-smoothing : none;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
 }
 
-i.aggiungi{
-  background-color: rgba(0,0,0,0.0);
-  margin-left: 8px;
-  color: #f5aa3b;
+.alignright i {
+    color: var(--primary-color);
 }
 
-span.utente{
-  display: inline;
-  margin: 5px;
+i.aggiungi {
+    background-color: rgba(0, 0, 0, 0.0);
+    margin-left: 8px;
+    color: #f5aa3b;
 }
 
-input.utente{
-  margin: 8px; 
-  display: inline;
+span.utente {
+    display: inline;
+    margin: 5px;
 }
 
-div.utente:hover{
-  background-color: #3c3c3c;
+input.utente {
+    margin: 8px;
+    display: inline;
 }

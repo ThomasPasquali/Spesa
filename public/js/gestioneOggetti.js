@@ -52,7 +52,6 @@ $(document).ready(async function() {
         let id = getIDfromDatalist($('#allSupermercati'),parsed);
         let s = form.serialize().replace(superm,id);
         sendRequest('/insert/oggetto', s).then((res) => {
-        sendRequest('/insert/oggetto', form.serialize()).then((res) => {
             res[0].Elimina = "🗑️";
             table.addData(res[0]);
             form.trigger('reset');

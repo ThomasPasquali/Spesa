@@ -2,6 +2,7 @@
     Set up colors and fonts of all the application.
 */
 
+
 /* Font import */
 
 @font-face {
@@ -28,16 +29,12 @@
     font-weight: 400;
 }
 
-:root{
+:root {
     /* What a color */
-
-    --primary-color : #0c4ea5;
-    --secondary-color : #ffb917;
-    --text-color : #000000;
-    --light-background-color : #84abff;
-
+    --primary-color: #0c4ea5;
+    --secondary-color: #ffb917;
+    --text-color: #000000;
+    --light-background-color: #84abff;
     /* What a font */
-
-    --text-font : lato;
-      
+    --text-font: lato;
 }
