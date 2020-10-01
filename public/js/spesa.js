@@ -63,9 +63,17 @@ $(document).ready(function() {
 
     window.listaSpesa.refreshLista();
 
+    var toRefresh = false;
     function checkInternetConnection(){
-        if (navigator.onLine) $('#connectionWarning').addClass("hidden");
-        else $('#connectionWarning').removeClass("hidden");
+        if (navigator.onLine) {
+            $('#connectionWarning').addClass("hidden");
+            $('.sezione').each(function(){ $(this).css("pointer-events", 'all'); });
+            if(toRefresh) location.reload();
+        }else {
+            $('#connectionWarning').removeClass("hidden");
+            $('.sezione').each(function(){ $(this).css("pointer-events", 'none'); });
+            toRefresh = true;
+        }
         setTimeout(function() {
             checkInternetConnection();
         }, 5000);
