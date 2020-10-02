@@ -164,3 +164,7 @@ input.utente {
     margin: 8px;
     display: inline;
 }
+
+form {
+    padding: 15px;
+}

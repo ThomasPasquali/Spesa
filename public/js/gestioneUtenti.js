@@ -20,7 +20,6 @@ $(function() {
     })
 
     //Richiesta di ogni gruppo dei suoi componenti
-
     let refreshUser = function() {
         $('.groupCard.container').each(function() {
             $(this).children('.utenti').empty();

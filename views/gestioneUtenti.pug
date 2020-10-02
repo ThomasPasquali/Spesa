@@ -23,4 +23,8 @@ html
                     div.utenti(style='display: none;', id='utenti_'+g.ID)
                     button.utente.addUser(id=''+g.ID)
                         i.fa.fa-plus.rimuovi
+        form(class="formBeauty", action="insert/gruppoUtenti", method="POST")
+            label(for="nome") Nuovo gruppo:
+            input(id="nome", class="n2", type="text", name="nome")
+            input(type="submit", class="btn", value="Crea nuovo gruppo")
         

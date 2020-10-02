@@ -221,14 +221,14 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
                 user.name,
                 req.body.prezoAcquisto
             );
-            io.sockets.emit('acquistato', req.body.IDOggetto);
+            io.sockets.emit('acquistato', {'oggetto':req.body.IDOggetto, 'lista':req.body.IDLista});
             break;
         case 'annullaAcquistoOggetto':
             risposta = query.annullaAcquistaOggetto(
                 req.body.IDOggetto,
                 req.body.IDLista
             );
-            io.sockets.emit('annullamentoAcquisto', req.body.IDOggetto);
+            io.sockets.emit('annullamentoAcquisto', {'oggetto':req.body.IDOggetto, 'lista':req.body.IDLista});
             break;
         case 'chiudiLista':
             risposta = query.chiudiLista(req.body.IDLista);
@@ -236,7 +236,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
             break;
         case 'qtaOggetto':
             risposta = query.modificaQtaOggetto(req.body.IDOggetto, req.body.IDLista, req.body.qta);
-            io.sockets.emit('modificaQtaOggetto', { oggetto: req.body.IDOggetto, qta: req.body.qta });
+            io.sockets.emit('modificaQtaOggetto', { oggetto: req.body.IDOggetto, qta: req.body.qta, lista: req.body.IDLista});
             break;
         case 'oggetto':
             risposta = query.updateOggetto(req.body.ID, req.body.Nome, req.body.Note, req.body.Prezzo);
@@ -255,14 +255,14 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
 
 });
 
-app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo)/, function(req, res) {
+app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti)/, function(req, res) {
     const richiesta = req.originalUrl.split('/')[2];
     let risposta;
     switch (richiesta) {
         case 'oggettoLista':
             risposta = query.insertOggettoLista(req.body.IDOggetto, req.body.IDLista, req.body.IDSupermercato, (req.body.qta ? 1 : req.body.qta));
             query.getOggetto(req.body.IDOggetto).then((o) => {
-                io.sockets.emit('inseritoOggettoLista', o[0]);
+                io.sockets.emit('inseritoOggettoLista', {'oggetto':o[0], 'lista':req.body.IDLista});
             });
             break;
         case 'oggetto':
@@ -280,23 +280,34 @@ app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo)/, function(
             }).catch((err) => { return err; });
             break;
         case 'utenteInGruppo':
-            risposta = query.insertUtenteInGruppo(req.body.IDG, req.body.IDU)
+            risposta = query.insertUtenteInGruppo(req.body.IDG, req.body.IDU);
+            break;
+        case 'gruppoUtenti':
+            query.insertGruppoUtenti(req.body.nome).then((succ) => {
+                res.redirect('/gestioneUtenze');
+            }).catch((err) => {
+                console.log(err);
+                res.write('Errore!');
+            });
             break;
         default:
             risposta = null;
             break;
     }
-    risposta.then((data) => {
-        res.write(JSON.stringify(data));
-        res.end();
-    }).catch((err) => {
-        res.write(JSON.stringify(err));
-        res.end();
-    });
+    if(risposta)
+        risposta.then((data) => {
+            console.log(data);
+            res.write(JSON.stringify(data));
+            res.end();
+        }).catch((err) => {
+            console.log(err);
+            res.write(JSON.stringify(err));
+            res.end();
+        });
 
 });
 
-app.post(/\/delete\/(oggetto|utente)/, function(req, res) {
+app.post(/\/delete\/(oggetto|utente|oggettoLista)/, function(req, res) {
     const richiesta = req.originalUrl.split('/')[2];
     let risposta;
     switch (richiesta) {
@@ -305,6 +316,12 @@ app.post(/\/delete\/(oggetto|utente)/, function(req, res) {
             break;
         case 'utente':
             risposta = query.deleteUtenteFromGruppo(req.body.IDG, req.body.IDU);
+            break;
+        case 'oggettoLista':
+            risposta = query.deleteOggettoLista(req.body.oggetto, req.body.lista);
+            risposta.then(() => {
+                io.sockets.emit('eliminatoOggettoLista', {'oggetto':req.body.oggetto, 'lista':req.body.lista});
+            })
             break;
         default:
             risposta = null;

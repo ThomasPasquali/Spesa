@@ -6,3 +6,9 @@
     background-color: red;
     font-weight: bold;
 }
+
+.container-oggetto a{
+    position: absolute;
+    right: 8%;
+    cursor: pointer;
+}

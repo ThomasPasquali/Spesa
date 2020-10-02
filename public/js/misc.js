@@ -54,6 +54,7 @@ function requestUsers(id) {
             });
             var btnDownHTML = '<button type="button"><i class="fa fa-angle-down"></i></button>';
             var newUpHTML = '<button type="button"><i class="fa fa-angle-up"></i></button>';
+            
             groups.forEach(function(IDGruppo) {
                 if (($('#button_' + IDGruppo).find('i').attr('class') == 'fa fa-angle-up')) {
                     $('#button_' + IDGruppo).empty().append(newUpHTML);
@@ -70,7 +71,7 @@ function requestUsers(id) {
                         changeClass('#button_' + IDGruppo, btnDownHTML, newUpHTML);
                     })
                 }
-            })
+            });
         }
     });
 }

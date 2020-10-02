@@ -33,32 +33,49 @@ $(document).ready(function() {
         window.listaSpesa.nuovoOggetto();
     });
 
+    /*************Elimina oggetto***********/
+    $('body').on('click', '.delete-oggetto', function() {
+        window.listaSpesa.deleteOggetto($(this).parent().find('input').val());
+    });
+
     /**********REAL-TIME EVENTS*********/
     const server = io(window.location.origin, {path: '/events'});
     server.on('connect', function(){
         
-        server.on('acquistato', function(IDOggetto) {
-            window.listaSpesa.moveToAcquistati(IDOggetto);
+        server.on('acquistato', function(res) {
+            if(res.lista == listaSpesa.getID())
+                window.listaSpesa.moveToAcquistati(res.oggetto);
         });
 
-        server.on('annullamentoAcquisto', function(IDOggetto){
-            window.listaSpesa.moveToNonAcquistati(IDOggetto);
+        server.on('annullamentoAcquisto', function(res){
+            if(res.lista == listaSpesa.getID())
+                window.listaSpesa.moveToNonAcquistati(res.oggetto);
         });
 
         server.on('modificaQtaOggetto', function(res){
-            var o = window.listaSpesa.getOggetto(res.oggetto);
-            o.qta = res.qta;
-            window.listaSpesa.refreshOggetto(o.id, o);
+            if(res.lista == listaSpesa.getID()) {
+                var o = window.listaSpesa.getOggetto(res.oggetto);
+                o.qta = res.qta;
+                window.listaSpesa.refreshOggetto(o.id, o);
+            }
         });
 
         server.on('inseritoOggettoLista', function(o){
-            window.listaSpesa.addOggetto(new Oggetto(o.ID,o.Nome,o.Note,o.Prezzo,1,false));
+            if(o.lista == listaSpesa.getID()) {
+                o = o.oggetto;
+                window.listaSpesa.addOggetto(new Oggetto(o.ID,o.Nome,o.Note,o.Prezzo,1,false));
+            }
+        });
+        
+        server.on('eliminatoOggettoLista', function(o){
+            if(o.lista == listaSpesa.getID())
+                window.listaSpesa.removeOggetto(o.oggetto);
         });
         
         server.on('chiusuraLista', function(){
             window.listaSpesa.bloccaPagina();
         });
-
+        
     });
 
     window.listaSpesa.refreshLista();

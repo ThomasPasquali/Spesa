@@ -48,6 +48,36 @@ export default class ListaSpesa extends Lista{
         }
     }
 
+    deleteOggetto(idOggetto) {
+        let idLista = this.getID();
+        $.confirm({
+            title: 'Sei sicuro?',
+            theme: 'black',
+            buttons: {
+                submit: {
+                    text: 'Conferma',
+                    btnClass: 'btn-blue',
+                    keys: ['enter']
+                },
+                cancel: {
+                    text: 'Annulla',
+                    btnClass: 'btn-gray',
+                }
+            },
+            onAction: function(action){
+                if(action == 'submit')
+                    sendRequest('/delete/oggettoLista', {
+                        oggetto: idOggetto,
+                        lista: idLista
+                    }).catch((err) => { alert('EVVOVE'); console.log(err); });
+            }
+        });
+    }
+
+    removeOggetto(id) {
+        $(`.container-oggetto input[value=${id}]`).parent().remove();
+    }
+
     acquistaOggetto(id) {
         var o = this.getOggetto(id);
         var lista = this;
@@ -151,9 +181,10 @@ export default class ListaSpesa extends Lista{
             oggetto.qta = newOggetto.qta;
             oggetto.acquistato = newOggetto.acquistato;
             if(createElement)
-                oggetto.element = $('<div></div>').append(
+                oggetto.element = $('<div class="container-oggetto"></div>').append(
                     $(`<input class="oggetto" type="checkbox">`).attr('id', `oggetto_${oggetto.id}`),
-                    $(`<label for="oggetto_${oggetto.id}"></label>`));
+                    $(`<label for="oggetto_${oggetto.id}"></label>`),
+                    $(`<a class="delete-oggetto">🗑️</a>`));
             
             if(oggetto.element) {
                 oggetto.element.children('label').text(`${oggetto.nome}${(oggetto.note?' ('+oggetto.note+')':'')} ${oggetto.qta}Pz.`);
