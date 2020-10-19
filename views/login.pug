@@ -1,13 +1,20 @@
-extends layout
-
-block content
+include ../lib/lib
+doctype mobile
+html
+    head
+        title #{title}
+        +jquery
+        meta(charset='UTF-8')
+        meta(name='viewport',content='width=device-width, initial-scale=1')
+        link(rel='stylesheet',type='text/css',href='/css/login.css')
+        script(src='/js/misc.js' type='module')
+    body
         .limiter
             .container-login100
                 .wrap-login100.p-t-50.p-b-90
                     form.login100-form.validate-form.flex-sb.flex-w(action='/login', method='POST')
                         span.login100-form-title.p-b-51
                             img.transImage(src='/images/eurospin-logo.png',height="165",width="150")
-                            | Login
                         span.login100-form-title-2
                             label #{errNotValidUsrOrPass}
                         .wrap-input100.validate-input.m-b-16(data-validate='Username obbligatorio')

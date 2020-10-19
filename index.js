@@ -33,33 +33,26 @@ const SALT_ROUNDS = 3;
 
 /**********CONTROLLO LOGIN (su tutte le pagine tranne login)*********/
 app.use(function(req, res, next) {
-    //FIXME prendere dati da sessione
-    global.user = {
-        name: 'Berga',
-        isAdmin: true,
-        prefGroup: { ID: 1, Nome: 'Il Trio' }
-    };
-    next();
-    //FIXME Uncomment
-    /*if(req.session.username || req.originalUrl == '/login')
-      next();
-    else
-      res.redirect('/login');*/
+    if(req.session.username || req.originalUrl == '/login'){
+        next();
+    }else
+        res.redirect('/login');
 });
 
 /***********REDIRECT HOME***********/
 app.get('/', function(req, res) { res.redirect('/home'); });
 
 /***********LOGIN***********/
-app.get('/login', function(req, res) { res.render('login', { title: 'Loggati babbano' }); });
+app.get('/login', function(req, res) { res.render('login', { title: 'Loggati SDM' }); });
 app.post('/login', function(req, res) {
     let username = req.body.usr;
     let password = req.body.psw;
     if (username && password)
         query.getDatiUtente(username).then(dati => {
             dati = dati[0];
-            if (bcrypt.compareSync(password, dati['Password'])) {
+            if (dati && bcrypt.compareSync(password, dati['Password'])) {
                 req.session.username = username;
+                req.session.role = dati['Ruolo'];
                 req.session.prefs = JSON.parse(dati['Preferenze']);
                 res.redirect('/home');
             } else
@@ -73,6 +66,12 @@ app.post('/login', function(req, res) {
             title: 'DANGER',
             errNotValidUsrOrPass: 'Username o password errati'
         });
+});
+
+/***********LOGOUT***********/
+app.get('/logout', function(req, res) {
+    req.session.destroy();
+    res.redirect('/login');
 });
 
 /***********GENERATORE HASH PER PASSWORD***********/
@@ -100,17 +99,17 @@ app.get('/test', function(req, res) {
 /***********NUOVA LISTA***********/
 app.get('/newLista', function(req, res) {
     const supermercati = query.getSupermercati();
-    const gruppi = query.getGruppiUtente(user.name, user.prefGroup.ID);
+    const gruppi = query.getGruppiUtente(req.session.username);
 
     Promise.all([gruppi, supermercati]).then(function(values) {
         res.render('addLista', {
             title: 'Nuova lista',
             saluto: misc.getSaluto(),
-            user: user.name,
+            user: req.session.username,
             displayTitle: '',
             displaySearchBar: 'none;',
             displayConfirmB: '',
-            prefGroup: user.prefGroup,
+            prefGroup: '',
             allGroups: values[0],
             allSupermercati: values[1]
         });
@@ -120,11 +119,11 @@ app.get('/newLista', function(req, res) {
 
 /*************HOME PAGE***********/
 app.get('/home', function(req, res) {
-    const listeUtente = query.getListeUtente(user.name);
+    const listeUtente = query.getListeUtente(req.session.username);
     listeUtente.then(function(liste) {
         res.render('home', {
             saluto: misc.getSaluto(),
-            user: user,
+            user: req.session.username,
             displayTitle: '',
             displaySearchBar: '',
             displayConfirmB: '',
@@ -138,7 +137,7 @@ app.get('/home', function(req, res) {
 app.get('/gestioneOggetti', function(req, res) {
     res.render('gestioneOggetti', {
         saluto: misc.getSaluto(),
-        user: user,
+        user: req.session.username,
     });
 });
 
@@ -148,7 +147,7 @@ app.get('/gestioneUtenze', function(req, res) {
     allGroups.then(function(groups) {
         res.render('gestioneUtenti', {
             saluto: misc.getSaluto(),
-            user: user,
+            user: req.session.username,
             groups: groups
         });
     }).catch(function(err) { console.log(err); });
@@ -218,7 +217,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
             risposta = query.acquistaOggetto(
                 req.body.IDOggetto,
                 req.body.IDLista,
-                user.name,
+                req.session.username,
                 req.body.prezoAcquisto
             );
             io.sockets.emit('acquistato', {'oggetto':req.body.IDOggetto, 'lista':req.body.IDLista});
