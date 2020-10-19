@@ -221,14 +221,14 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
                 user.name,
                 req.body.prezoAcquisto
             );
-            io.sockets.emit('acquistato', {'oggetto':req.body.IDOggetto, 'lista':req.body.IDLista});
+            io.sockets.emit('acquistato', { 'oggetto': req.body.IDOggetto, 'lista': req.body.IDLista });
             break;
         case 'annullaAcquistoOggetto':
             risposta = query.annullaAcquistaOggetto(
                 req.body.IDOggetto,
                 req.body.IDLista
             );
-            io.sockets.emit('annullamentoAcquisto', {'oggetto':req.body.IDOggetto, 'lista':req.body.IDLista});
+            io.sockets.emit('annullamentoAcquisto', { 'oggetto': req.body.IDOggetto, 'lista': req.body.IDLista });
             break;
         case 'chiudiLista':
             risposta = query.chiudiLista(req.body.IDLista);
@@ -236,7 +236,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
             break;
         case 'qtaOggetto':
             risposta = query.modificaQtaOggetto(req.body.IDOggetto, req.body.IDLista, req.body.qta);
-            io.sockets.emit('modificaQtaOggetto', { oggetto: req.body.IDOggetto, qta: req.body.qta, lista: req.body.IDLista});
+            io.sockets.emit('modificaQtaOggetto', { oggetto: req.body.IDOggetto, qta: req.body.qta, lista: req.body.IDLista });
             break;
         case 'oggetto':
             risposta = query.updateOggetto(req.body.ID, req.body.Nome, req.body.Note, req.body.Prezzo);
@@ -255,32 +255,29 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
 
 });
 
-app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti)/, function(req, res) {
+app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti|oggettoInNuovaLista)/, function(req, res) {
     const richiesta = req.originalUrl.split('/')[2];
     let risposta;
     switch (richiesta) {
         case 'oggettoLista':
             risposta = query.insertOggettoLista(req.body.IDOggetto, req.body.IDLista, req.body.IDSupermercato, (req.body.qta ? 1 : req.body.qta));
             query.getOggetto(req.body.IDOggetto).then((o) => {
-                io.sockets.emit('inseritoOggettoLista', {'oggetto':o[0], 'lista':req.body.IDLista});
+                io.sockets.emit('inseritoOggettoLista', { 'oggetto': o[0], 'lista': req.body.IDLista });
             });
             break;
         case 'oggetto':
             risposta = query.insertOggetto(req.body.nome, req.body.note, req.body.prezzo, req.body.supermercato);
             break;
         case 'nuovaLista':
-            var rP = false;
-            if (req.body.richiedi_prezzi) { rP = true }
-            risposta = query.addLista(req.body.nomeLista, req.body.groupLinked, req.body.supermercato, rP).then(function(ris) {
-                var r;
-                for (let [idAlimento, qta] of Object.entries(misc.getAlimentiAndQta(req.body))) {
-                    r = query.insertOggettoLista(idAlimento, ris.insertId, req.body.supermercato, qta);
-                }
-                return r;
-            }).catch((err) => { return err; });
+            risposta = query.addLista(req.body.nomeLista, req.body.groupLinked, req.body.supermercato, req.body.richiedi_prezzi)
+                .catch((err) => { return err; });
+            break;
+        case 'oggettoInNuovaLista':
+            query.insertOggettoLista(req.body.IDOggetto, req.body.IDLista, req.body.IDSupermercato,
+                req.body.qta).catch((err) => { console.log(err); });
             break;
         case 'utenteInGruppo':
-            risposta = query.insertUtenteInGruppo(req.body.IDG, req.body.IDU);
+            risposta = query.insertUtenteInGruppo(req.body.IDG, req.body.IDU).catch((err) => { console.log(err); });
             break;
         case 'gruppoUtenti':
             query.insertGruppoUtenti(req.body.nome).then((succ) => {
@@ -294,7 +291,7 @@ app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti
             risposta = null;
             break;
     }
-    if(risposta)
+    if (risposta)
         risposta.then((data) => {
             console.log(data);
             res.write(JSON.stringify(data));
@@ -320,7 +317,7 @@ app.post(/\/delete\/(oggetto|utente|oggettoLista)/, function(req, res) {
         case 'oggettoLista':
             risposta = query.deleteOggettoLista(req.body.oggetto, req.body.lista);
             risposta.then(() => {
-                io.sockets.emit('eliminatoOggettoLista', {'oggetto':req.body.oggetto, 'lista':req.body.lista});
+                io.sockets.emit('eliminatoOggettoLista', { 'oggetto': req.body.oggetto, 'lista': req.body.lista });
             })
             break;
         default:
