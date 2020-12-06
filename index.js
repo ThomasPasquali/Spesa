@@ -123,7 +123,10 @@ app.get('/home', function(req, res) {
     listeUtente.then(function(liste) {
         res.render('home', {
             saluto: misc.getSaluto(),
-            user: req.session.username,
+            user: {
+                name: req.session.username,
+                role: req.session.role
+            },
             displayTitle: '',
             displaySearchBar: '',
             displayConfirmB: '',

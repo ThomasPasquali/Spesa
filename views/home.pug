@@ -28,10 +28,10 @@ html
                     .sezione.operazioni.op
                         a(href="/newLista") Crea una nuova lista
                         i.fa.fa-arrow-right
-                    if user.isAdmin
+                    if user.role == 'Admin'
                         .sezione.operazioni.op
-                            a(href="/gestioneOggetti") Gest. oggetti e supermercati
+                            a(href="/gestioneOggetti") Oggetti e supermercati
                             i.fa.fa-arrow-right
                         .sezione.operazioni.op
-                            a(href="/gestioneUtenze") Gest. utenze
+                            a(href="/gestioneUtenze") Utenze
                             i.fa.fa-arrow-right

@@ -28,22 +28,28 @@
     padding-bottom: 100px; /* height of your footer */
 }
 
+footer.flex {
+    display: flex;
+    position: fixed;
+}
+
 footer {
-    position: absolute;
     bottom: 0;
     width: 100%;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .iconButton {
-    position: relative;
     width:60px;
     height:60px;
     background-color:#005CB9;
     border-radius:50px;
     text-align:center;
     box-shadow: 2px 2px 3px #999;
-    margin-right: 20px;
+}
+
+#chiudi {
+    margin-left: 20px;
 }
 
 .iconButton i {
