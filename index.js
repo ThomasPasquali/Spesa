@@ -33,10 +33,11 @@ const SALT_ROUNDS = 3;
 
 /**********CONTROLLO LOGIN (su tutte le pagine tranne login)*********/
 app.use(function(req, res, next) {
+    next(); req.session.username = 'Thomas'/*
     if(req.session.username || req.originalUrl == '/login'){
         next();
     }else
-        res.redirect('/login');
+        res.redirect('/login');*/
 });
 
 /***********REDIRECT HOME***********/
@@ -156,6 +157,18 @@ app.get('/gestioneUtenze', function(req, res) {
     }).catch(function(err) { console.log(err); });
 });
 
+/*************GESTIONE RICETTE***********/
+app.get('/gestioneRicette', function(req, res) {
+    const ricetteUtente = query.getRicetteUtente('Thomas');//FIXME req.session.username);
+    ricetteUtente.then(function(ricette) {
+        res.render('gestioneRicette', {
+            saluto: misc.getSaluto(),
+            user: req.session.username,
+            ricette: ricette
+        });
+    }).catch(function(err) { console.log(err); });
+});
+
 /*************SPESA***********/
 app.get(/\/spesa\/\d+/, function(req, res) {
     const listaID = req.originalUrl.split('/')[2];
@@ -212,7 +225,7 @@ app.post(/\/get\/(oggettiSupermercato|oggettiLista|ricetteGruppo|ricettaByID|sup
 
 });
 
-app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOggetto|oggetto)/, function(req, res) {
+app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOggetto|oggetto|ricetta)/, function(req, res) {
     const richiesta = req.originalUrl.split('/')[2];
     let risposta;
     switch (richiesta) {
@@ -243,6 +256,9 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
         case 'oggetto':
             risposta = query.updateOggetto(req.body.ID, req.body.Nome, req.body.Note, req.body.Prezzo);
             break;
+        case 'ricetta':
+            risposta = query.updateRicetta(req.body.ID, req.body.Descrizione);
+            break;
         default:
             risposta = null;
             break;
@@ -257,7 +273,7 @@ app.post(/\/update\/(acquistaOggetto|annullaAcquistoOggetto|chiudiLista|qtaOgget
 
 });
 
-app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti|oggettoInNuovaLista)/, function(req, res) {
+app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti|oggettoInNuovaLista|oggettoRicetta)/, function(req, res) {
     const richiesta = req.originalUrl.split('/')[2];
     let risposta;
     switch (richiesta) {
@@ -275,8 +291,7 @@ app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti
                 .catch((err) => { return err; });
             break;
         case 'oggettoInNuovaLista':
-            query.insertOggettoLista(req.body.IDOggetto, req.body.IDLista, req.body.IDSupermercato,
-                req.body.qta).catch((err) => { console.log(err); });
+            query.insertOggettoLista(req.body.IDOggetto, req.body.IDLista, req.body.IDSupermercato, req.body.qta).catch((err) => { console.log(err); });
             break;
         case 'utenteInGruppo':
             risposta = query.insertUtenteInGruppo(req.body.IDG, req.body.IDU).catch((err) => { console.log(err); });
@@ -288,6 +303,9 @@ app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti
                 console.log(err);
                 res.write('Errore!');
             });
+            break;
+        case 'oggettoRicetta':
+            risposta = query.insertOggettoRicetta(req.body.ricetta, req.body.oggetto, req.body.supermercato);
             break;
         default:
             risposta = null;
@@ -306,7 +324,7 @@ app.post(/\/insert\/(oggettoLista|oggetto|nuovaLista|utenteInGruppo|gruppoUtenti
 
 });
 
-app.post(/\/delete\/(oggetto|utente|oggettoLista)/, function(req, res) {
+app.post(/\/delete\/(oggetto|utente|oggettoLista|oggettoRicetta)/, function(req, res) {
     const richiesta = req.originalUrl.split('/')[2];
     let risposta;
     switch (richiesta) {
@@ -321,6 +339,9 @@ app.post(/\/delete\/(oggetto|utente|oggettoLista)/, function(req, res) {
             risposta.then(() => {
                 io.sockets.emit('eliminatoOggettoLista', { 'oggetto': req.body.oggetto, 'lista': req.body.lista });
             })
+            break;
+        case 'oggettoRicetta':
+            risposta = query.deleteOggettoRicetta(req.body.oggetto, req.body.ricetta);
             break;
         default:
             risposta = null;

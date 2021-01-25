@@ -1,0 +1,12 @@
+.descrizione {
+    text-align: center;
+}
+
+.oggetto *{
+    display: inline-flex;
+    
+}
+
+.delete-oggetto {
+    cursor: pointer;
+}

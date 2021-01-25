@@ -1,4 +1,4 @@
-function sendRequest(url, data, method = "POST") {
+function sendRequest(url, data={}, method = "POST") {
     return new Promise((resolve, reject) => {
         $.ajax(url, {
             type: method,
@@ -22,8 +22,7 @@ function replaceAll(str, cerca, sostituisci) {
     return str.split(cerca).join(sostituisci);
 }
 
-$(document).ready(() => {
-
+jQuery(function() {
     $('body').on('click', '.dropdown-control', function() {
         let target = $($(this).data('target'));
         if (target.is(':visible')) {

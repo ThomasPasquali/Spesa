@@ -1,0 +1,24 @@
+include ../lib/lib
+doctype mobile
+html
+    head
+        title Gestione ricette
+        meta(charset='UTF-8')
+        +jquery
+        +bootstrap
+        +fontawesome
+        +jqueryConfirm
+        +cssLib
+        link(rel='stylesheet', href='../css/main.css')
+        link(rel='stylesheet', href='../css/ricette.css')
+        script(src='./js/gestioneRicette.js')
+    body
+        header
+            +navbar('Gestione ricette','none')
+        #ricette.centra2
+            each ricetta, ricettaID in ricette
+                script addRicetta(#{ricettaID}, "#{ricetta.nome}", "#{ricetta.descrizione}", #{ricetta.supermercato});
+                each oggetto, oggettoID in ricetta.oggetti
+                    script addOggettoRicetta(#{ricettaID}, #{oggettoID}, "#{oggetto.nome}", "#{oggetto.note}");
+                    
+                    

@@ -26,14 +26,14 @@ html
         .centra2
             .sezioneSenzaSfondo
                 h5 #{lista.Nome}
-                h6 Loc. #{lista.Supermercato}
+                h6 #{lista.Supermercato}
             .sezione.attive
                 .flex.dropdown-control(data-target='#oggetti-da-acquistare')
                     i.fas.fa-caret-down
                     h2 Oggetti da acquistare
                 #oggetti-da-acquistare.flex-vertical
                     +caricamento
-            .sezione.attive
+            .sezione.attive(style='margin-bottom:80px;')
                 .flex.dropdown-control(data-target='#oggetti-acquistati')
                     i.fas.fa-caret-down
                     h2 Oggetti acquistati
